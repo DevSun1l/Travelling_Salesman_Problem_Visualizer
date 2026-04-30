@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSP & NP-Completeness Visualizer</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #1e293b;
+            --panel-hover: #334155;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --border: #334155;
+            --primary: #0ea5e9;
+            --primary-hover: #0284c7;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --highlight: rgba(14, 165, 233, 0.2);
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-family);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--panel);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Collapsible Theory Section */
+        .theory-section {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        details.theory-box {
+            background-color: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        details.theory-box summary {
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            background-color: var(--panel-hover);
+        }
+
+        details.theory-box summary::before {
+            content: "📚";
+            margin-right: 10px;
+        }
+
+        .theory-content {
+            padding: 20px;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+        }
+
+        .theory-content h3 {
+            color: var(--text);
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        /* Workspace Grid */
+        .workspace {
+            max-width: 1400px;
+            margin: 0 auto 20px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            gap: 20px;
+        }
+
+        .panel {
+            background-color: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+
+        /* Controls */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, input[type="number"], button {
+            background-color: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary);
+        }
+
+        button {
+            cursor: pointer;
+            background-color: var(--panel-hover);
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        button.btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        button.btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button.btn-danger {
+            background-color: transparent;
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+        button.btn-danger:hover {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* Speed Slider */
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+        .speed-marks {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        /* Map Visualizer */
+        .map-wrapper {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        svg.map-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--bg);
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-weight: bold;
+        }
+        .stats-bar span span {
+            color: var(--primary);
+        }
+
+        /* Log Box */
+        .log-box {
+            flex: 1;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 200px;
+            font-size: 13px;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .log-entry {
+            padding: 5px;
+            border-left: 3px solid var(--border);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .log-entry.active {
+            border-left-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Clickable Lists (Pseudo & Complexities) */
+        .clickable-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 13px;
+        }
+        .clickable-item {
+            padding: 8px 10px;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .clickable-item:hover {
+            background-color: var(--panel-hover);
+            border-color: var(--primary);
+        }
+        .clickable-item.active {
+            background-color: var(--highlight);
+            border-left: 3px solid var(--primary);
+        }
+
+        /* Cost Matrix */
+        .matrix-wrapper {
+            overflow: auto;
+            max-height: 250px;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+        }
+        table.matrix {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: center;
+        }
+        table.matrix th, table.matrix td {
+            border: 1px solid var(--border);
+            padding: 5px;
+        }
+        table.matrix th {
+            color: var(--primary);
+            background-color: var(--panel-hover);
+        }
+
+        /* Modal overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .modal-title {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .modal-body {
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .modal-close {
+            float: right;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .modal-close:hover {
+            background: var(--danger);
+            border-color: var(--danger);
+        }
+
+        /* Compare & NP Views */
+        .compare-view, .np-view {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .compare-view.active, .np-view.active {
+            display: grid;
+        }
+        
+        .side-by-side {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: var(--bg);
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .side-by-side .map-wrapper {
+            height: 300px;
+        }
+
+        /* Hide elements dynamically */
+        .hidden { display: none !important; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>TSP Teaching Visualizer</h1>
+        <p style="color: var(--muted); font-size: 14px;">Explore Exact and Practical Approaches for the Traveling Salesman Problem</p>
+    </header>
+
+    <div class="theory-section">
+        <details class="theory-box">
+            <summary>Theory & NP-Completeness (CLO-5)</summary>
+            <div class="theory-content">
+                <p>The <strong>Traveling Salesman Problem (TSP)</strong> asks: "Given a list of cities and the distances between each pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city?"</p>
+                
+                <h3>Proof of NP-Completeness</h3>
+                <p><strong>1. TSP is in NP:</strong> Given a proposed tour (a certificate) and a distance B, a verifier can sum the weights of the edges in the tour and check if the sum is ≤ B in polynomial time O(n).</p>
+                <p><strong>2. NP-Hardness (Reduction from Hamiltonian Cycle):</strong><br>
+                Let G = (V, E) be an instance of the Hamiltonian Cycle (HC) problem. We construct a TSP instance G' = (V, E') as follows:</p>
+                <ul>
+                    <li>Create a complete graph G' with the same vertices V.</li>
+                    <li>For every edge in G, assign a weight of 1 in G'.</li>
+                    <li>For every edge NOT in G, assign a weight of 2 in G'.</li>
+                </ul>
+                <p><strong>Forward Proof:</strong> If G has a Hamiltonian Cycle, the same cycle in G' uses only edges of weight 1. Since a cycle visits all n vertices, its total weight is exactly n. Thus, TSP has a tour of weight ≤ n.</p>
+                <p><strong>Backward Proof:</strong> If TSP has a tour of weight ≤ n in G', it must use exactly n edges. Since the minimum edge weight is 1, it must use only edges of weight 1. These edges correspond precisely to the edges that exist in G. Therefore, G has a Hamiltonian Cycle.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- Modal Overlay for Explanations -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <div class="modal-title" id="modal-title">Explanation</div>
+            <div class="modal-body" id="modal-body">Description goes here.</div>
+            <button class="modal-close" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <div class="workspace">
+        
+        <!-- LEFT PANEL: Controls -->
+        <div class="panel">
+            <div class="panel-title">⚙️ Controls</div>
+            
+            <div class="control-group">
+                <label>Mode</label>
+                <select id="mode-select" onchange="switchMode()">
+                    <option value="normal">Visualizer Mode</option>
+                    <option value="compare">Compare Mode (Greedy vs 2-Opt)</option>
+                    <option value="np">NP-Completeness Mode</option>
+                </select>
+            </div>
+
+            <div id="normal-controls" style="display:flex; flex-direction:column; gap:15px;">
+                <div class="control-group">
+                    <label>Algorithm Selection</label>
+                    <select id="algo-select" onchange="onAlgoChange()">
+                        <optgroup label="EXACT APPROACH">
+                            <option value="brute">Brute Force</option>
+                        </optgroup>
+                        <optgroup label="PRACTICAL APPROACH">
+                            <option value="greedy">Nearest Neighbor (Greedy)</option>
+                            <option value="twoopt">2-Opt Local Search</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label>Number of Nodes (1-10)</label>
+                    <input type="number" id="node-count" value="5" min="1" max="10" oninput="enforceLimit(this)">
+                    <button class="btn-primary" onclick="generateGraph()" style="margin-top: 5px;">Generate Graph</button>
+                </div>
+
+                <div class="control-group">
+                    <label>Simulation Speed</label>
+                    <div class="slider-container">
+                        <input type="range" id="speed-slider" min="1" max="5" value="3">
+                        <div class="speed-marks">
+                            <span>Slow</span>
+                            <span>Normal</span>
+                            <span>Fast</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-grid">
+                    <button id="btn-play" class="btn-primary" onclick="togglePlay()">Play</button>
+                    <button id="btn-step" onclick="stepSim()">Step</button>
+                    <button id="btn-stop" onclick="stopSim()">Stop</button>
+                    <button id="btn-reset" class="btn-danger" onclick="resetSim()">Reset</button>
+                </div>
+            </div>
+
+            <div id="compare-controls" class="hidden" style="flex-direction:column; gap:15px;">
+                <div class="control-group">
+                    <label>Number of Nodes (1-10)</label>
+                    <input type="number" id="compare-node-count" value="8" min="1" max="10" oninput="enforceLimit(this)">
+                    <button class="btn-primary" onclick="generateCompareGraph()" style="margin-top: 5px;">Generate & Compare</button>
+                </div>
+                <p style="font-size:12px; color:var(--muted);">Generates a graph and instantly runs both Greedy and 2-Opt to compare Tour Quality and Computation Time.</p>
+            </div>
+
+            <div id="np-controls" class="hidden" style="flex-direction:column; gap:15px;">
+                <button class="btn-primary" onclick="generateNPGraph()">Generate New NP Instance</button>
+                <p style="font-size:12px; color:var(--muted);">Shows how a Hamiltonian Cycle (HC) instance is reduced to a TSP instance by assigning weights.</p>
+            </div>
+
+        </div>
+
+        <!-- CENTER PANEL: Visualizer -->
+        <div class="panel" id="center-panel">
+            
+            <!-- Normal Mode View -->
+            <div id="normal-view" style="display:flex; flex-direction:column; gap:15px; height:100%;">
+                <div class="panel-title">🗺️ Map Visualizer</div>
+                <div class="map-wrapper">
+                    <svg class="map-svg" id="main-svg"></svg>
+                </div>
+                <div class="stats-bar">
+                    <span>Steps: <span id="step-count">0</span></span>
+                    <span>Best Cost: <span id="best-cost">∞</span></span>
+                </div>
+                <div class="panel-title" style="margin-top: 5px;">📝 Step-by-Step Explanation</div>
+                <div class="log-box" id="log-box">
+                    <div class="log-entry active">Simulation initialized. Ready to run.</div>
+                </div>
+            </div>
+
+            <!-- Compare Mode View -->
+            <div id="compare-view" class="compare-view">
+                <div class="side-by-side">
+                    <div class="panel-title">Nearest Neighbor (Greedy)</div>
+                    <div class="map-wrapper"><svg class="map-svg" id="compare-greedy-svg"></svg></div>
+                    <div class="stats-bar" style="flex-direction:column; gap:5px;">
+                        <span>Cost: <span id="comp-greedy-cost">-</span></span>
+                        <span>Time: <span id="comp-greedy-time">-</span></span>
+                    </div>
+                </div>
+                <div class="side-by-side">
+                    <div class="panel-title">2-Opt Local Search</div>
+                    <div class="map-wrapper"><svg class="map-svg" id="compare-twoopt-svg"></svg></div>
+                    <div class="stats-bar" style="flex-direction:column; gap:5px;">
+                        <span>Cost: <span id="comp-twoopt-cost">-</span></span>
+                        <span>Time: <span id="comp-twoopt-time">-</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NP-Completeness Mode View -->
+            <div id="np-view" class="np-view">
+                <div class="side-by-side">
+                    <div class="panel-title">Graph G (Hamiltonian Cycle)</div>
+                    <div class="map-wrapper"><svg class="map-svg" id="np-g-svg"></svg></div>
+                    <p style="font-size:12px; color:var(--muted);">Edges in G represent valid connections. Does a cycle exist?</p>
+                </div>
+                <div class="side-by-side">
+                    <div class="panel-title">Graph G' (TSP Reduction)</div>
+                    <div class="map-wrapper"><svg class="map-svg" id="np-tsp-svg"></svg></div>
+                    <p style="font-size:12px; color:var(--muted);">Blue edges: Weight = 1. Red dotted: Weight = 2. Tour ≤ n iff HC exists.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT PANEL: Details -->
+        <div class="panel" id="right-panel">
+            <div class="panel-title">💻 Pseudocode</div>
+            <div class="clickable-list" id="pseudo-list">
+                <!-- Populated via JS -->
+            </div>
+
+            <div class="panel-title" style="margin-top: 10px;">⏱️ Complexities</div>
+            <div class="clickable-list" id="complexity-list">
+                <!-- Populated via JS -->
+            </div>
+
+            <div class="panel-title" style="margin-top: 10px;">📊 Cost Matrix</div>
+            <div class="matrix-wrapper">
+                <table class="matrix" id="cost-matrix">
+                    <!-- Populated via JS -->
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ========================
+           GLOBAL HELPERS
+           ======================== */
+        function enforceLimit(el) {
+            if (el.value > 10) el.value = 10;
+            if (el.value !== "" && el.value < 1) el.value = 1;
+        }
+
+        /* ========================
+           DATA & CONFIGURATION
+           ======================== */
+        const algoInfo = {
+            brute: {
+                pseudo: [
+                    { line: "bestDist = ∞, bestPath = null", exp: "Initialize the best distance to infinity and path to null." },
+                    { line: "for each permutation P of nodes:", exp: "Generate every possible permutation (ordering) of the cities. This is exhaustive." },
+                    { line: "  d = calculateDistance(P)", exp: "Sum the weights of the edges for the current permutation." },
+                    { line: "  if d < bestDist:", exp: "Check if the current permutation's distance is strictly less than the best found so far." },
+                    { line: "    bestDist = d; bestPath = P", exp: "If it is shorter, update the record for best distance and best path." },
+                    { line: "return bestPath", exp: "After checking all permutations, return the absolute shortest tour." }
+                ],
+                comp: [
+                    { name: "Best Time: O(n!)", exp: "Even in the best case, Brute Force must generate and evaluate all n! permutations." },
+                    { name: "Worst Time: O(n!)", exp: "Always evaluates n! permutations, representing the 'curse of dimensionality'." },
+                    { name: "Space: O(n)", exp: "Requires O(n) space to store the current permutation being evaluated." }
+                ]
+            },
+            greedy: {
+                pseudo: [
+                    { line: "tour = [startNode], visited = {startNode}", exp: "Start at an arbitrary node and mark it as visited." },
+                    { line: "while unvisited nodes exist:", exp: "Continue the loop until all n nodes are part of the tour." },
+                    { line: "  last = tour.last()", exp: "Look at the most recently added node in the tour." },
+                    { line: "  next = findNearestUnvisited(last)", exp: "Greedy choice: scan all unvisited neighbors and pick the one with the smallest edge weight." },
+                    { line: "  tour.push(next); visited.add(next)", exp: "Add the nearest neighbor to the tour and mark it." },
+                    { line: "tour.push(startNode); return tour", exp: "Complete the cycle by returning to the start node." }
+                ],
+                comp: [
+                    { name: "Best Time: O(n²)", exp: "For each of the n nodes, we scan up to n unvisited nodes to find the minimum." },
+                    { name: "Worst Time: O(n²)", exp: "The nested loops (n nodes × n scans) always execute." },
+                    { name: "Space: O(n)", exp: "Requires O(n) space to store the tour and the visited set." }
+                ]
+            },
+            twoopt: {
+                pseudo: [
+                    { line: "tour = greedyPath()", exp: "Initialize the tour using a fast heuristic like Nearest Neighbor." },
+                    { line: "improved = true", exp: "Flag to track if the last iteration made an improvement." },
+                    { line: "while improved:", exp: "Keep looping as long as we keep finding shorter tours." },
+                    { line: "  improved = false", exp: "Assume no improvement until we find one." },
+                    { line: "  for i=1 to n-2, for k=i+1 to n-1:", exp: "Iterate over all possible pairs of non-adjacent edges to swap." },
+                    { line: "    if swap(i, k) reduces distance:", exp: "If reversing the segment between i and k results in a shorter total distance." },
+                    { line: "      tour = swap(i, k); improved = true", exp: "Apply the 2-opt swap (untangling a crossing) and set flag to true." },
+                    { line: "return tour", exp: "Return the locally optimal tour." }
+                ],
+                comp: [
+                    { name: "Best Time: O(n²)", exp: "If the initial tour is already locally optimal, it takes O(n²) to verify it." },
+                    { name: "Worst Time: O(n² · X)", exp: "X is the number of improvements. In the worst case, this can be exponential, but practically it's small." },
+                    { name: "Space: O(n)", exp: "Requires O(n) space to store the tour and intermediate swapped segments." }
+                ]
+            }
+        };
+
+        /* ========================
+           STATE VARIABLES
+           ======================== */
+        let nodes = [];
+        let adj = [];
+        let currentMode = 'normal';
+        let isPlaying = false;
+        let simGen = null;
+        let stepCounter = 0;
+        let bestFoundCost = Infinity;
+        let playInterval = null;
+
+        /* ========================
+           INITIALIZATION & UI
+           ======================== */
+        
+        function switchMode() {
+            currentMode = document.getElementById('mode-select').value;
+            
+            document.getElementById('normal-controls').classList.add('hidden');
+            document.getElementById('compare-controls').classList.add('hidden');
+            document.getElementById('np-controls').classList.add('hidden');
+            
+            document.getElementById('normal-view').classList.add('hidden');
+            document.getElementById('compare-view').classList.remove('active');
+            document.getElementById('np-view').classList.remove('active');
+            document.getElementById('right-panel').classList.add('hidden');
+            document.getElementById('center-panel').style.gridColumn = "span 1";
+
+            stopSim();
+
+            if (currentMode === 'normal') {
+                document.getElementById('normal-controls').classList.remove('hidden');
+                document.getElementById('normal-view').classList.remove('hidden');
+                document.getElementById('right-panel').classList.remove('hidden');
+                document.getElementById('center-panel').style.gridColumn = "span 1"; // Restore grid
+                generateGraph();
+            } else if (currentMode === 'compare') {
+                document.getElementById('compare-controls').classList.remove('hidden');
+                document.getElementById('compare-view').classList.add('active');
+                document.getElementById('center-panel').style.gridColumn = "span 2"; // Span across right panel space
+                generateCompareGraph();
+            } else if (currentMode === 'np') {
+                document.getElementById('np-controls').classList.remove('hidden');
+                document.getElementById('np-view').classList.add('active');
+                document.getElementById('center-panel').style.gridColumn = "span 2";
+                generateNPGraph();
+            }
+        }
+
+        function onAlgoChange() {
+            updateRightPanel();
+            resetSim();
+        }
+
+        function updateRightPanel() {
+            const algo = document.getElementById('algo-select').value;
+            const info = algoInfo[algo];
+            
+            // Populate Pseudo
+            const pBox = document.getElementById('pseudo-list');
+            pBox.innerHTML = info.pseudo.map((p, i) => 
+                `<div class="clickable-item pseudo-line" id="pseudo-${i}" onclick="showModal('Pseudocode Line ${i+1}', '${p.exp.replace(/'/g, "\\'")}')">${p.line}</div>`
+            ).join('');
+
+            // Populate Complexities
+            const cBox = document.getElementById('complexity-list');
+            cBox.innerHTML = info.comp.map((c, i) => 
+                `<div class="clickable-item" onclick="showModal('${c.name}', '${c.exp.replace(/'/g, "\\'")}')">${c.name}</div>`
+            ).join('');
+        }
+
+        function showModal(title, body) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = body;
+            document.getElementById('modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        /* ========================
+           GRAPH GENERATION
+           ======================== */
+        
+        function getCanvasSize(svgId) {
+            const svg = document.getElementById(svgId);
+            return { w: svg.clientWidth || 400, h: svg.clientHeight || 400 };
+        }
+
+        function generateNodes(n, w, h) {
+            let pts = [];
+            const margin = 40;
+            const centerX = w / 2;
+            const centerY = h / 2;
+            
+            for (let i = 0; i < n; i++) {
+                let x, y, tooClose;
+                let attempts = 0;
+                do {
+                    // Bias towards center
+                    let r = Math.random() * (Math.min(w, h)/2 - margin);
+                    let theta = Math.random() * 2 * Math.PI;
+                    x = centerX + r * Math.cos(theta);
+                    y = centerY + r * Math.sin(theta);
+                    
+                    tooClose = pts.some(p => Math.hypot(p.x - x, p.y - y) < 50);
+                    attempts++;
+                } while (tooClose && attempts < 100);
+                pts.push({ id: i, x: x, y: y });
+            }
+            return pts;
+        }
+
+        function buildAdjacency(pts) {
+            let m = [];
+            for (let i = 0; i < pts.length; i++) {
+                m[i] = [];
+                for (let j = 0; j < pts.length; j++) {
+                    m[i][j] = i === j ? 0 : Math.round(Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y));
+                }
+            }
+            return m;
+        }
+
+        function renderMatrix(m) {
+            let html = `<tr><th></th>${m.map((_, i) => `<th>${i}</th>`).join('')}</tr>`;
+            for (let i = 0; i < m.length; i++) {
+                html += `<tr><th>${i}</th>`;
+                for (let j = 0; j < m[i].length; j++) {
+                    html += `<td>${m[i][j]}</td>`;
+                }
+                html += `</tr>`;
+            }
+            document.getElementById('cost-matrix').innerHTML = html;
+        }
+
+        function drawGraph(svgId, pts, edges = [], activeNodes = []) {
+            const svg = document.getElementById(svgId);
+            let html = '';
+            
+            // Edges: {u, v, color, width, dash}
+            edges.forEach(e => {
+                const u = pts[e.u], v = pts[e.v];
+                html += `<line x1="${u.x}" y1="${u.y}" x2="${v.x}" y2="${v.y}" 
+                    stroke="${e.color || 'var(--border)'}" 
+                    stroke-width="${e.width || 1}" 
+                    stroke-dasharray="${e.dash || ''}" />`;
+            });
+
+            // Nodes
+            pts.forEach(p => {
+                const isActive = activeNodes.includes(p.id);
+                html += `<circle cx="${p.x}" cy="${p.y}" r="14" 
+                    fill="${isActive ? 'var(--primary)' : 'var(--panel)'}" 
+                    stroke="${isActive ? 'white' : 'var(--primary)'}" stroke-width="2"/>
+                    <text x="${p.x}" y="${p.y + 4}" fill="${isActive ? 'white' : 'var(--text)'}" 
+                    font-size="11" font-weight="bold" text-anchor="middle">${p.id}</text>`;
+            });
+
+            svg.innerHTML = html;
+        }
+
+        function generateGraph() {
+            stopSim();
+            const n = parseInt(document.getElementById('node-count').value) || 5;
+            const size = getCanvasSize('main-svg');
+            nodes = generateNodes(n, size.w, size.h);
+            adj = buildAdjacency(nodes);
+            
+            renderMatrix(adj);
+            updateRightPanel();
+            resetSim();
+        }
+
+        /* ========================
+           SIMULATION LOGIC
+           ======================== */
+
+        function logMsg(msg, isSuccess = false) {
+            const box = document.getElementById('log-box');
+            const div = document.createElement('div');
+            div.className = `log-entry ${isSuccess ? 'active' : ''}`;
+            div.innerText = `[Step ${stepCounter}] ${msg}`;
+            box.prepend(div);
+        }
+
+        function updateStats(cost) {
+            document.getElementById('step-count').innerText = stepCounter;
+            if (cost !== null && cost < bestFoundCost) {
+                bestFoundCost = cost;
+                document.getElementById('best-cost').innerText = cost;
+            }
+        }
+
+        function highlightPseudo(index) {
+            document.querySelectorAll('.pseudo-line').forEach(el => el.classList.remove('active'));
+            if (index !== null) {
+                const el = document.getElementById(`pseudo-${index}`);
+                if (el) el.classList.add('active');
+            }
+        }
+
+        // Generator: Brute Force
+        async function* genBrute() {
+            yield { pseudo: 0, msg: "Initializing variables.", edges: [], active: [] };
+            
+            function* permute(arr, m = []) {
+                if (arr.length === 0) yield m;
+                for (let i = 0; i < arr.length; i++) {
+                    let curr = arr.splice(i, 1);
+                    yield* permute(arr.slice(), m.concat(curr));
+                    arr.splice(i, 0, curr[0]);
+                }
+            }
+            
+            const ids = nodes.map(n => n.id);
+            const perms = permute(ids);
+            
+            yield { pseudo: 1, msg: "Starting permutations evaluation.", edges: [], active: [] };
+            
+            for (let p of perms) {
+                stepCounter++;
+                let edges = [];
+                let d = 0;
+                for (let i = 0; i < p.length; i++) {
+                    const u = p[i], v = p[(i+1)%p.length];
+                    d += adj[u][v];
+                    edges.push({u, v, color: 'var(--primary)', width: 2});
+                }
+                
+                yield { pseudo: 2, msg: `Evaluating Path: ${p.join('-')}. Cost = ${d}`, edges, active: p };
+                
+                yield { pseudo: 3, msg: `Check if ${d} < ${bestFoundCost === Infinity ? '∞' : bestFoundCost}`, edges, active: p };
+                
+                if (d < bestFoundCost) {
+                    yield { pseudo: 4, msg: `New shortest tour found! Cost: ${d}`, edges: edges.map(e => ({...e, color: 'var(--success)', width: 3})), active: p, cost: d, success: true };
+                }
+            }
+            yield { pseudo: 5, msg: "All permutations checked. Returning best path.", edges: [], active: [] };
+        }
+
+        // Generator: Greedy
+        async function* genGreedy() {
+            let tour = [0];
+            let visited = new Set([0]);
+            
+            yield { pseudo: 0, msg: "Start at Node 0.", edges: [], active: [0] };
+            
+            while (visited.size < nodes.length) {
+                stepCounter++;
+                yield { pseudo: 1, msg: `Unvisited nodes remain.`, active: tour };
+                
+                let last = tour[tour.length - 1];
+                yield { pseudo: 2, msg: `Current node is ${last}.`, active: [last] };
+                
+                let nearest = -1, minDist = Infinity;
+                for (let i = 0; i < nodes.length; i++) {
+                    if (!visited.has(i) && adj[last][i] < minDist) {
+                        minDist = adj[last][i];
+                        nearest = i;
+                    }
+                }
+                
+                yield { pseudo: 3, msg: `Nearest unvisited to ${last} is ${nearest} (Dist: ${minDist}).`, active: [last, nearest], edges: [{u:last, v:nearest, color:'var(--warning)', width:2, dash:'4'}] };
+                
+                tour.push(nearest);
+                visited.add(nearest);
+                
+                let curEdges = [];
+                for (let i = 0; i < tour.length - 1; i++) curEdges.push({u:tour[i], v:tour[i+1], color:'var(--primary)', width:2});
+                
+                yield { pseudo: 4, msg: `Added ${nearest} to tour.`, active: tour, edges: curEdges };
+            }
+            
+            let finalEdges = [];
+            let totalD = 0;
+            for (let i = 0; i < tour.length; i++) {
+                const u = tour[i], v = tour[(i+1)%tour.length];
+                finalEdges.push({u, v, color:'var(--success)', width:3});
+                totalD += adj[u][v];
+            }
+            stepCounter++;
+            yield { pseudo: 5, msg: `Returned to start. Total Cost: ${totalD}`, active: tour, edges: finalEdges, cost: totalD, success: true };
+        }
+
+        // Generator: 2-Opt
+        async function* genTwoOpt() {
+            // First run Greedy silently to get initial tour
+            let t = [0], v = new Set([0]);
+            while (v.size < nodes.length) {
+                let l = t[t.length-1], n = -1, min = Infinity;
+                for (let i = 0; i < nodes.length; i++) if (!v.has(i) && adj[l][i] < min) { min = adj[l][i]; n = i; }
+                t.push(n); v.add(n);
+            }
+            
+            let getD = (path) => path.reduce((s, c, i) => s + adj[c][path[(i+1)%path.length]], 0);
+            let tour = [...t];
+            let cost = getD(tour);
+            
+            let drawTour = (p, color) => p.map((c, i) => ({u:c, v:p[(i+1)%p.length], color: color, width: 2}));
+            
+            yield { pseudo: 0, msg: `Initial Greedy Tour Cost: ${cost}`, edges: drawTour(tour, 'var(--primary)'), active: tour, cost: cost };
+            
+            let improved = true;
+            while (improved) {
+                stepCounter++;
+                yield { pseudo: 2, msg: `Looking for improvements...`, edges: drawTour(tour, 'var(--primary)'), active: [] };
+                improved = false;
+                
+                for (let i = 1; i < tour.length - 2; i++) {
+                    for (let k = i + 1; k < tour.length - 1; k++) {
+                        
+                        yield { pseudo: 4, msg: `Checking swap between edges (${tour[i-1]}-${tour[i]}) and (${tour[k]}-${tour[k+1]}).`, edges: drawTour(tour, 'var(--primary)'), active: [tour[i-1], tour[i], tour[k], tour[k+1]] };
+                        
+                        // 2-opt swap logic: reverse segment i to k
+                        let newTour = tour.slice(0, i).concat(tour.slice(i, k+1).reverse()).concat(tour.slice(k+1));
+                        let newCost = getD(newTour);
+                        
+                        yield { pseudo: 5, msg: `Cost after swap would be: ${newCost}`, edges: drawTour(newTour, 'var(--warning)'), active: [] };
+                        
+                        if (newCost < cost) {
+                            tour = newTour;
+                            cost = newCost;
+                            improved = true;
+                            yield { pseudo: 6, msg: `Improvement found! New Best: ${cost}`, edges: drawTour(tour, 'var(--success)'), active: [], cost: cost, success: true };
+                            break; // standard 2-opt restarts after improvement
+                        }
+                    }
+                    if (improved) break;
+                }
+            }
+            yield { pseudo: 7, msg: "Local minimum reached. No more improvements possible.", edges: drawTour(tour, 'var(--success)'), active: [] };
+        }
+
+        function resetSim() {
+            stopSim();
+            stepCounter = 0;
+            bestFoundCost = Infinity;
+            document.getElementById('step-count').innerText = '0';
+            document.getElementById('best-cost').innerText = '∞';
+            document.getElementById('log-box').innerHTML = '<div class="log-entry">Simulation reset. Press Step or Play to begin.</div>';
+            highlightPseudo(null);
+            drawGraph('main-svg', nodes, []);
+            
+            const algo = document.getElementById('algo-select').value;
+            if (algo === 'brute') simGen = genBrute();
+            else if (algo === 'greedy') simGen = genGreedy();
+            else if (algo === 'twoopt') simGen = genTwoOpt();
+        }
+
+        async function stepSim() {
+            if (!simGen) resetSim();
+            const res = await simGen.next();
+            if (!res.done) {
+                const state = res.value;
+                highlightPseudo(state.pseudo);
+                logMsg(state.msg, state.success);
+                updateStats(state.cost || null);
+                drawGraph('main-svg', nodes, state.edges || [], state.active || []);
+            } else {
+                logMsg("Algorithm Finished.", true);
+                stopSim();
+            }
+        }
+
+        function stopSim() {
+            isPlaying = false;
+            clearInterval(playInterval);
+            document.getElementById('btn-play').innerText = "Play";
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                stopSim();
+            } else {
+                isPlaying = true;
+                document.getElementById('btn-play').innerText = "Pause";
+                const speedVal = 6 - document.getElementById('speed-slider').value; // 1 to 5 mapping to ms
+                const ms = speedVal * 200;
+                playInterval = setInterval(() => {
+                    stepSim();
+                    if (!isPlaying) clearInterval(playInterval);
+                }, ms);
+            }
+        }
+
+        /* ========================
+           COMPARE MODE
+           ======================== */
+        
+        async function generateCompareGraph() {
+            const n = parseInt(document.getElementById('compare-node-count').value) || 8;
+            const size = getCanvasSize('compare-greedy-svg');
+            const compNodes = generateNodes(n, size.w, size.h);
+            const compAdj = buildAdjacency(compNodes);
+            
+            drawGraph('compare-greedy-svg', compNodes, []);
+            drawGraph('compare-twoopt-svg', compNodes, []);
+            
+            document.getElementById('comp-greedy-cost').innerText = 'Computing...';
+            document.getElementById('comp-twoopt-cost').innerText = 'Computing...';
+
+            // Sleep to allow UI update
+            await new Promise(r => setTimeout(r, 50));
+
+            // Greedy
+            let t1 = performance.now();
+            let t = [0], v = new Set([0]);
+            while (v.size < compNodes.length) {
+                let l = t[t.length-1], nx = -1, min = Infinity;
+                for (let i = 0; i < compNodes.length; i++) if (!v.has(i) && compAdj[l][i] < min) { min = compAdj[l][i]; nx = i; }
+                t.push(nx); v.add(nx);
+            }
+            let getD = (path) => path.reduce((s, c, i) => s + compAdj[c][path[(i+1)%path.length]], 0);
+            let greedyCost = getD(t);
+            let t2 = performance.now();
+            
+            drawGraph('compare-greedy-svg', compNodes, t.map((c, i) => ({u:c, v:t[(i+1)%t.length], color:'var(--warning)', width:2})));
+            document.getElementById('comp-greedy-cost').innerText = greedyCost;
+            document.getElementById('comp-greedy-time').innerText = (t2 - t1).toFixed(2) + ' ms';
+
+            // 2-Opt
+            let t3 = performance.now();
+            let tour = [...t];
+            let cost = greedyCost;
+            let improved = true;
+            while (improved) {
+                improved = false;
+                for (let i = 1; i < tour.length - 2; i++) {
+                    for (let k = i + 1; k < tour.length - 1; k++) {
+                        let newTour = tour.slice(0, i).concat(tour.slice(i, k+1).reverse()).concat(tour.slice(k+1));
+                        let newCost = getD(newTour);
+                        if (newCost < cost) {
+                            tour = newTour;
+                            cost = newCost;
+                            improved = true;
+                            break;
+                        }
+                    }
+                    if (improved) break;
+                }
+            }
+            let t4 = performance.now();
+
+            drawGraph('compare-twoopt-svg', compNodes, tour.map((c, i) => ({u:c, v:tour[(i+1)%tour.length], color:'var(--success)', width:2})));
+            document.getElementById('comp-twoopt-cost').innerText = cost;
+            document.getElementById('comp-twoopt-time').innerText = (t4 - t3).toFixed(2) + ' ms';
+        }
+
+        /* ========================
+           NP-COMPLETENESS MODE
+           ======================== */
+
+        function generateNPGraph() {
+            const n = 6;
+            const size = getCanvasSize('np-g-svg');
+            const npNodes = generateNodes(n, size.w, size.h);
+            
+            // Create a Hamiltonian Cycle (e.g., 0-1-2-3-4-5-0)
+            let hcEdges = [];
+            for(let i=0; i<n; i++) {
+                hcEdges.push({u: i, v: (i+1)%n, color: 'var(--primary)', width: 3});
+            }
+            // Add a few random edges to G to make it non-trivial, but not complete
+            hcEdges.push({u: 0, v: 3, color: 'var(--primary)', width: 3});
+            hcEdges.push({u: 1, v: 4, color: 'var(--primary)', width: 3});
+
+            drawGraph('np-g-svg', npNodes, hcEdges);
+
+            // Create TSP Graph (Complete graph)
+            let tspEdges = [];
+            for (let i = 0; i < n; i++) {
+                for (let j = i+1; j < n; j++) {
+                    // Check if edge exists in HC graph
+                    const inG = hcEdges.some(e => (e.u===i && e.v===j) || (e.u===j && e.v===i));
+                    if (inG) {
+                        tspEdges.push({u: i, v: j, color: 'var(--primary)', width: 3}); // Weight 1
+                    } else {
+                        tspEdges.push({u: i, v: j, color: 'var(--danger)', width: 2, dash: '5,5'}); // Weight 2
+                    }
+                }
+            }
+
+            drawGraph('np-tsp-svg', npNodes, tspEdges);
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            generateGraph();
+            // Close modal on outside click
+            document.getElementById('modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('modal')) closeModal();
+            });
+        });
+
+    </script>
+</body>
+</html>
