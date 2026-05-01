@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -136,7 +137,9 @@
             letter-spacing: 0.5px;
         }
 
-        select, input[type="number"], button {
+        select,
+        input[type="number"],
+        button {
             background-color: var(--bg);
             color: var(--text);
             border: 1px solid var(--border);
@@ -147,7 +150,8 @@
             outline: none;
         }
 
-        select:focus, input:focus {
+        select:focus,
+        input:focus {
             border-color: var(--primary);
         }
 
@@ -170,6 +174,7 @@
             color: white;
             border-color: var(--primary);
         }
+
         button.btn-primary:hover {
             background-color: var(--primary-hover);
         }
@@ -179,6 +184,7 @@
             color: var(--danger);
             border-color: var(--danger);
         }
+
         button.btn-danger:hover {
             background-color: var(--danger);
             color: white;
@@ -196,10 +202,12 @@
             flex-direction: column;
             gap: 5px;
         }
+
         input[type="range"] {
             width: 100%;
             cursor: pointer;
         }
+
         .speed-marks {
             display: flex;
             justify-content: space-between;
@@ -217,6 +225,7 @@
             border-radius: 12px;
             overflow: hidden;
         }
+
         svg.map-svg {
             width: 100%;
             height: 100%;
@@ -232,6 +241,7 @@
             border: 1px solid var(--border);
             font-weight: bold;
         }
+
         .stats-bar span span {
             color: var(--primary);
         }
@@ -251,11 +261,13 @@
             flex-direction: column;
             gap: 5px;
         }
+
         .log-entry {
             padding: 5px;
             border-left: 3px solid var(--border);
             background: rgba(255, 255, 255, 0.02);
         }
+
         .log-entry.active {
             border-left-color: var(--success);
             background: rgba(16, 185, 129, 0.1);
@@ -268,6 +280,7 @@
             gap: 5px;
             font-size: 13px;
         }
+
         .clickable-item {
             padding: 8px 10px;
             background-color: var(--bg);
@@ -277,10 +290,12 @@
             transition: background 0.2s;
             font-family: 'Courier New', Courier, monospace;
         }
+
         .clickable-item:hover {
             background-color: var(--panel-hover);
             border-color: var(--primary);
         }
+
         .clickable-item.active {
             background-color: var(--highlight);
             border-left: 3px solid var(--primary);
@@ -375,16 +390,20 @@
             border-radius: 6px;
             padding: 10px;
         }
+
         table.matrix {
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
             text-align: center;
         }
-        table.matrix th, table.matrix td {
+
+        table.matrix th,
+        table.matrix td {
             border: 1px solid var(--border);
             padding: 5px;
         }
+
         table.matrix th {
             color: var(--primary);
             background-color: var(--panel-hover);
@@ -393,7 +412,10 @@
         /* Modal overlay */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.7);
             display: flex;
             align-items: center;
@@ -403,10 +425,12 @@
             pointer-events: none;
             transition: opacity 0.3s;
         }
+
         .modal-overlay.show {
             opacity: 1;
             pointer-events: auto;
         }
+
         .modal-content {
             background: var(--panel);
             border: 1px solid var(--border);
@@ -414,8 +438,9 @@
             border-radius: 8px;
             max-width: 500px;
             width: 90%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
+
         .modal-title {
             color: var(--primary);
             font-size: 18px;
@@ -424,12 +449,14 @@
             border-bottom: 1px solid var(--border);
             padding-bottom: 10px;
         }
+
         .modal-body {
             color: var(--text);
             font-size: 14px;
             line-height: 1.6;
             margin-bottom: 20px;
         }
+
         .modal-close {
             float: right;
             background: var(--bg);
@@ -439,21 +466,25 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .modal-close:hover {
             background: var(--danger);
             border-color: var(--danger);
         }
 
         /* Compare & NP Views */
-        .compare-view, .np-view {
+        .compare-view,
+        .np-view {
             display: none;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
         }
-        .compare-view.active, .np-view.active {
+
+        .compare-view.active,
+        .np-view.active {
             display: grid;
         }
-        
+
         .side-by-side {
             display: flex;
             flex-direction: column;
@@ -463,135 +494,207 @@
             border: 1px solid var(--border);
             border-radius: 12px;
         }
+
         .side-by-side .map-wrapper {
             height: 300px;
         }
 
         /* Hide elements dynamically */
-        .hidden { display: none !important; }
-
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
+
 <body>
 
     <header>
         <h1>TSP Teaching Visualizer</h1>
-        <p style="color: var(--muted); font-size: 14px;">Explore Exact and Practical Approaches for the Traveling Salesman Problem</p>
+        <p style="color: var(--muted); font-size: 14px;">Explore Exact and Practical Approaches for the Traveling
+            Salesman Problem</p>
     </header>
 
     <div class="theory-section">
         <details class="theory-box">
-            <summary>Theory & NP-Completeness (CLO-5)</summary>
+            <summary>Traveling Salesman Problem — Complete Teaching Guide</summary>
             <div class="theory-content">
-                <p>The <strong>Traveling Salesperson Problem (TSP)</strong> is one of the most famous and extensively studied problems in theoretical computer science and operations research. It falls under the category of combinatorial optimization.</p>
-                
+                <p>The <strong>Traveling Salesperson Problem (TSP)</strong> is one of the most famous and extensively
+                    studied problems in theoretical computer science and operations research. It falls under the
+                    category of combinatorial optimization.</p>
+
                 <h3>The Core Concept</h3>
-                <p>The problem asks a simple question: Given a list of cities and the distances between every pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city?</p>
-                
+                <p>The problem asks a simple question: Given a list of cities and the distances between every pair of
+                    cities, what is the shortest possible route that visits each city exactly once and returns to the
+                    origin city?</p>
+
                 <h3>Key Components</h3>
                 <p>To define a TSP, you generally need:</p>
                 <ul>
                     <li><strong>A Set of Cities:</strong> The nodes or vertices in a network.</li>
-                    <li><strong>Distances (Costs):</strong> The weight of the edges connecting the cities (can represent distance, time, or fuel cost).</li>
-                    <li><strong>The Hamiltonian Cycle:</strong> The mathematical term for a tour that visits every vertex exactly once and returns to the start.</li>
+                    <li><strong>Distances (Costs):</strong> The weight of the edges connecting the cities (can represent
+                        distance, time, or fuel cost).</li>
+                    <li><strong>The Hamiltonian Cycle:</strong> The mathematical term for a tour that visits every
+                        vertex exactly once and returns to the start.</li>
                 </ul>
 
                 <h3>The Key Concept: Minimizing "Wasted" Motion</h3>
                 <ul>
                     <li><strong>Completeness:</strong> You must visit every single point on your list.</li>
-                    <li><strong>Efficiency:</strong> You must do so using the least amount of "cost" (which usually means distance, time, or money).</li>
+                    <li><strong>Efficiency:</strong> You must do so using the least amount of "cost" (which usually
+                        means distance, time, or money).</li>
                 </ul>
 
                 <h3>Real-Life Example: Logistics and "Last Mile" Delivery</h3>
-                <p>Imagine a courier for a company like DHL, FedEx, or Aramex starting their day at a warehouse in a busy area like Dubai’s Al Quoz.</p>
+                <p>Imagine a courier for a company like DHL, FedEx, or Aramex starting their day at a warehouse in a
+                    busy area like Dubai’s Al Quoz.</p>
                 <ul>
-                    <li><strong>The Problem:</strong> The driver has 50 packages to deliver across the city—some in Dubai Marina, some in Deira, and others in Mirdif.</li>
-                    <li><strong>The Cost:</strong> Every extra kilometer driven is money lost on fuel, vehicle wear-and-tear, and driver wages. Missing a "delivery window" adds a time constraint.</li>
-                    <li><strong>The Solution:</strong> Companies use TSP-solving algorithms to calculate the exact sequence of turns. Saving just 1% of the distance results in millions of dollars saved annually.</li>
+                    <li><strong>The Problem:</strong> The driver has 50 packages to deliver across the city—some in
+                        Dubai Marina, some in Deira, and others in Mirdif.</li>
+                    <li><strong>The Cost:</strong> Every extra kilometer driven is money lost on fuel, vehicle
+                        wear-and-tear, and driver wages. Missing a "delivery window" adds a time constraint.</li>
+                    <li><strong>The Solution:</strong> Companies use TSP-solving algorithms to calculate the exact
+                        sequence of turns. Saving just 1% of the distance results in millions of dollars saved annually.
+                    </li>
                 </ul>
 
                 <h3>Algorithmic Heuristics: Why Greedy is Often Poor</h3>
-                <p>The <strong>Nearest-Neighbor (NN)</strong> algorithm often produces poor tours because it is a <strong>greedy heuristic</strong>. It makes choices based entirely on immediate, local convenience without considering long-term, global consequences.</p>
-                
-                <div style="background: rgba(245, 158, 11, 0.05); padding: 10px; border-radius: 8px; border-left: 3px solid var(--warning); margin: 10px 0;">
+                <p>The <strong>Nearest-Neighbor (NN)</strong> algorithm often produces poor tours because it is a
+                    <strong>greedy heuristic</strong>. It makes choices based entirely on immediate, local convenience
+                    without considering long-term, global consequences.
+                </p>
+
+                <div
+                    style="background: rgba(245, 158, 11, 0.05); padding: 10px; border-radius: 8px; border-left: 3px solid var(--warning); margin: 10px 0;">
                     <p><strong>Example: The Expanding Number Line</strong></p>
                     <p>Imagine 5 cities at mile markers: 0, 1, -2, 4, and -8.</p>
-                    <p style="margin-top: 5px;"><strong>NN Route (Start at 0):</strong> 0 to 1 to -2 to 4 to -8 and finally back to 0. <br>Total Distance: 1 + 3 + 6 + 12 + 8 = <strong>30</strong>.</p>
-                    <p><strong>Optimal Route:</strong> 0 to -2 to -8 to 1 to 4 and finally back to 0. <br>Total Distance: 2 + 6 + 9 + 3 + 4 = <strong>24</strong>.</p>
-                    <p style="font-size: 12px; margin-top: 5px; font-style: italic;">In this simple 5-city example, the greedy route is 25% longer simply because it lacked foresight.</p>
+                    <p style="margin-top: 5px;"><strong>NN Route (Start at 0):</strong> 0 to 1 to -2 to 4 to -8 and
+                        finally back to 0. <br>Total Distance: 1 + 3 + 6 + 12 + 8 = <strong>30</strong>.</p>
+                    <p><strong>Optimal Route:</strong> 0 to -2 to -8 to 1 to 4 and finally back to 0. <br>Total
+                        Distance: 2 + 6 + 9 + 3 + 4 = <strong>24</strong>.</p>
+                    <p style="font-size: 12px; margin-top: 5px; font-style: italic;">In this simple 5-city example, the
+                        greedy route is 25% longer simply because it lacked foresight.</p>
                 </div>
 
                 <h3>How 2-Opt Iteratively Improves the Route</h3>
-                <p>To fix the chaotic routes generated by greedy algorithms, we use <strong>2-opt (2-optimization)</strong>. It is a local search algorithm designed specifically to <strong>untangle crossed paths</strong>.</p>
+                <p>To fix the chaotic routes generated by greedy algorithms, we use <strong>2-opt
+                        (2-optimization)</strong>. It is a local search algorithm designed specifically to
+                    <strong>untangle crossed paths</strong>.
+                </p>
                 <ul>
-                    <li><strong>The Logic:</strong> In basic Euclidean geometry, a path that crosses itself is always mathematically longer than a path that does not. 2-opt systematically eliminates these crosses.</li>
-                    <li><strong>The Iterative Swap Process:</strong> 
+                    <li><strong>The Logic:</strong> In basic Euclidean geometry, a path that crosses itself is always
+                        mathematically longer than a path that does not. 2-opt systematically eliminates these crosses.
+                    </li>
+                    <li><strong>The Iterative Swap Process:</strong>
                         <ol>
-                            <li><strong>Select & Delete:</strong> The algorithm scans the tour, picks two random edges, and temporarily deletes them.</li>
-                            <li><strong>Reconnect:</strong> It reconnects the two disconnected curves in the only other valid way (which requires reversing the direction of the cities in the middle section).</li>
-                            <li><strong>Evaluate:</strong> If the new route is shorter (usually because a crossing was untangled), the swap is permanent. Otherwise, it is discarded.</li>
-                            <li><strong>Local Optimum:</strong> The process repeats until a full pass reveals zero improvements. The tour is now considered a "Local Optimum."</li>
+                            <li><strong>Select & Delete:</strong> The algorithm scans the tour, picks two random edges,
+                                and temporarily deletes them.</li>
+                            <li><strong>Reconnect:</strong> It reconnects the two disconnected curves in the only other
+                                valid way (which requires reversing the direction of the cities in the middle section).
+                            </li>
+                            <li><strong>Evaluate:</strong> If the new route is shorter (usually because a crossing was
+                                untangled), the swap is permanent. Otherwise, it is discarded.</li>
+                            <li><strong>Local Optimum:</strong> The process repeats until a full pass reveals zero
+                                improvements. The tour is now considered a "Local Optimum."</li>
                         </ol>
                     </li>
                 </ul>
-                
+
                 <h3>Proof of NP-Completeness</h3>
                 <p><strong>1. TSP is in NP:</strong></p>
                 <div style="margin-left: 15px; margin-bottom: 10px;">
-                    <p><em>The Certificate:</em> A certificate for the TSP is just an ordered list (or array) of the cities. Example: [City A, City C, City E, City B, City D, City A].</p>
+                    <p><em>The Certificate:</em> A certificate for the TSP is just an ordered list (or array) of the
+                        cities. Example: [City A, City C, City E, City B, City D, City A].</p>
                     <p><em>The Verifier Check (Polynomial Time):</em></p>
                     <ol>
-                        <li><strong>Completeness:</strong> Computer scans the array to ensure every city is listed once and start/end points match. (Takes <i>N</i> steps).</li>
-                        <li><strong>Distance:</strong> Computer adds distances between each adjacent pair. (Takes <i>N</i> steps).</li>
-                        <li><strong>Comparison:</strong> Compares final sum to the budget constraint <i>X</i>. Is the Total Sum <= <i>X</i>? (Takes 1 step).</li>
+                        <li><strong>Completeness:</strong> Computer scans the array to ensure every city is listed once
+                            and start/end points match. (Takes <i>N</i> steps).</li>
+                        <li><strong>Distance:</strong> Computer adds distances between each adjacent pair. (Takes
+                            <i>N</i> steps).
+                        </li>
+                        <li><strong>Comparison:</strong> Compares final sum to the budget constraint <i>X</i>. Is the
+                            Total Sum <= <i>X</i>? (Takes 1 step).</li>
                     </ol>
                     <p>Total verification time is O(N), which is polynomial.</p>
                 </div>
                 <p><strong>2. NP-Hardness: Reduction from Hamiltonian Cycle</strong></p>
-                
+
                 <div style="margin-left: 15px;">
                     <h4 style="color: var(--primary); margin-top: 15px;">The Setup</h4>
-                    <p><strong>The HC Instance (Input):</strong> You are given a standard graph <i>G</i> with <i>N</i> vertices. Question: Does there exist a cycle that visits every vertex exactly once?</p>
-                    <p><strong>The TSP Instance (Output):</strong> You create a complete graph <i>G'</i> with <i>N</i> vertices and edge weights, and a target budget <i>X</i>. Question: Is there a tour with a total distance <= <i>X</i>?</p>
+                    <p><strong>The HC Instance (Input):</strong> You are given a standard graph <i>G</i> with <i>N</i>
+                        vertices. Question: Does there exist a cycle that visits every vertex exactly once?</p>
+                    <p><strong>The TSP Instance (Output):</strong> You create a complete graph <i>G'</i> with <i>N</i>
+                        vertices and edge weights, and a target budget <i>X</i>. Question: Is there a tour with a total
+                        distance <= <i>X</i>?</p>
 
                     <h4 style="color: var(--primary); margin-top: 15px;">The Transformation Steps</h4>
-                    <p><strong>Step 1: Copy the Vertices</strong> - Take all <i>N</i> vertices from your original graph <i>G</i> and copy them to your new graph <i>G'</i>.</p>
-                    <p><strong>Step 2: Make it a "Complete" Graph</strong> - In <i>G'</i>, draw an edge connecting every single pair of vertices.</p>
-                    <p><strong>Step 3: Assign the Edge Weights</strong> - 
-                        <strong>Weight = 1</strong> if an edge existed in the original graph <i>G</i>. 
-                        <strong>Weight = 2</strong> if the edge did not exist in <i>G</i> (a "penalty" for using roads that weren't in the original problem).
+                    <p><strong>Step 1: Copy the Vertices</strong> - Take all <i>N</i> vertices from your original graph
+                        <i>G</i> and copy them to your new graph <i>G'</i>.
                     </p>
-                    <p><strong>Step 4: Set the Target Budget (X)</strong> - Set your maximum allowed distance to exactly equal the number of vertices: <i>X = N</i>.</p>
+                    <p><strong>Step 2: Make it a "Complete" Graph</strong> - In <i>G'</i>, draw an edge connecting every
+                        single pair of vertices.</p>
+                    <p><strong>Step 3: Assign the Edge Weights</strong> -
+                        <strong>Weight = 1</strong> if an edge existed in the original graph <i>G</i>.
+                        <strong>Weight = 2</strong> if the edge did not exist in <i>G</i> (a "penalty" for using roads
+                        that weren't in the original problem).
+                    </p>
+                    <p><strong>Step 4: Set the Target Budget (X)</strong> - Set your maximum allowed distance to exactly
+                        equal the number of vertices: <i>X = N</i>.</p>
 
                     <h4 style="color: var(--primary); margin-top: 15px;">Proof of Forward Direction</h4>
-                    <div style="background: rgba(16, 185, 129, 0.05); padding: 10px; border-radius: 8px; border-left: 3px solid var(--success);">
-                        <p><strong>Step 1: Assume Source is a YES-Instance</strong> - If the original graph <i>G</i> has a Hamiltonian Cycle, then every edge in that cycle exists in <i>G</i>.</p>
-                        <p><strong>Step 2: Trace Path in TSP Instance</strong> - Travel the exact same sequence in <i>G'</i>. It is a valid TSP tour because <i>G'</i> is complete.</p>
-                        <p><strong>Step 3: Calculate Cost</strong> - Each of the <i>N</i> edges corresponds to an original edge in <i>G</i>, so each has a weight of 1. Total Cost = <i>N</i> * 1 = <i>N</i>. Since Cost is exactly equal to the budget <i>X</i>, the TSP instance is a YES-instance.</p>
+                    <div
+                        style="background: rgba(16, 185, 129, 0.05); padding: 10px; border-radius: 8px; border-left: 3px solid var(--success);">
+                        <p><strong>Step 1: Assume Source is a YES-Instance</strong> - If the original graph <i>G</i> has
+                            a Hamiltonian Cycle, then every edge in that cycle exists in <i>G</i>.</p>
+                        <p><strong>Step 2: Trace Path in TSP Instance</strong> - Travel the exact same sequence in
+                            <i>G'</i>. It is a valid TSP tour because <i>G'</i> is complete.
+                        </p>
+                        <p><strong>Step 3: Calculate Cost</strong> - Each of the <i>N</i> edges corresponds to an
+                            original edge in <i>G</i>, so each has a weight of 1. Total Cost = <i>N</i> * 1 = <i>N</i>.
+                            Since Cost is exactly equal to the budget <i>X</i>, the TSP instance is a YES-instance.</p>
                     </div>
 
                     <h4 style="color: var(--primary); margin-top: 15px;">Proof of Backward Direction</h4>
-                    <div style="background: rgba(239, 68, 68, 0.05); padding: 10px; border-radius: 8px; border-left: 3px solid var(--danger);">
-                        <p><strong>Step 1: Assume TSP is a YES-Instance</strong> - If <i>G'</i> has a tour with total distance <= <i>N</i>. The tour connects <i>N</i> vertices, so it uses <i>N</i> edges.</p>
-                        <p><strong>Step 2: Cost Equation</strong> - Let <i>k</i> be the number of "penalty" edges (weight 2). The remaining (<i>N-k</i>) edges must have a weight of 1. 
-                            <br>Total Cost = (k * 2) + ((N - k) * 1) = 2k + N - k = <strong>N + k</strong>.</p>
-                        <p><strong>Step 3: Apply Constraint</strong> - Since we assume Cost <= <i>N</i>, then <i>N + k <= N</i>, which implies <i>k <= 0</i>. Since <i>k</i> cannot be negative, it must be exactly 0.</p>
-                        <p><strong>Step 4: Conclusion</strong> - Because <i>k = 0</i>, the tour uses zero penalty edges. All <i>N</i> edges in the tour have weight 1, meaning they all exist in the original graph <i>G</i>. This forms a valid Hamiltonian Cycle in <i>G</i>.</p>
+                    <div
+                        style="background: rgba(239, 68, 68, 0.05); padding: 10px; border-radius: 8px; border-left: 3px solid var(--danger);">
+                        <p><strong>Step 1: Assume TSP is a YES-Instance</strong> - If <i>G'</i> has a tour with total
+                            distance <= <i>N</i>. The tour connects <i>N</i> vertices, so it uses <i>N</i> edges.</p>
+                        <p><strong>Step 2: Cost Equation</strong> - Let <i>k</i> be the number of "penalty" edges
+                            (weight 2). The remaining (<i>N-k</i>) edges must have a weight of 1.
+                            <br>Total Cost = (k * 2) + ((N - k) * 1) = 2k + N - k = <strong>N + k</strong>.
+                        </p>
+                        <p><strong>Step 3: Apply Constraint</strong> - Since we assume Cost <= <i>N</i>, then <i>N + k
+                                    <= N</i>, which implies <i>k <= 0</i>. Since <i>k</i> cannot be negative, it must be
+                                                exactly 0.</p>
+                        <p><strong>Step 4: Conclusion</strong> - Because <i>k = 0</i>, the tour uses zero penalty edges.
+                            All <i>N</i> edges in the tour have weight 1, meaning they all exist in the original graph
+                            <i>G</i>. This forms a valid Hamiltonian Cycle in <i>G</i>.
+                        </p>
                     </div>
 
                     <h4 style="color: var(--primary); margin-top: 15px;">The Construction Algorithm Breakdown</h4>
                     <div style="margin-left: 15px;">
-                        <p><strong>Step 1: Copy the Vertices</strong> - The computer looks at <i>N</i> vertices in <i>G</i> and creates <i>N</i> cities in <i>G'</i>. <br><em>Complexity: O(N)</em></p>
-                        
-                        <p><strong>Step 2 & 3: Create Complete Graph & Assign Weights</strong> - The computer draws an edge between every pair of vertices. In a graph with <i>N</i> vertices, there are exactly N(N-1)/2 possible pairs. <br><em>Complexity: O(N^2)</em></p>
-                        
-                        <p><strong>Step 4: Set the Budget Constraint</strong> - Assigns <i>X = N</i>. <br><em>Complexity: O(1)</em></p>
-                        
-                        <p><strong>The Final Tally:</strong> The total time is O(N) + O(N^2) + O(1), which simplifies to <strong>O(N^2)</strong>. Since N^2 is a polynomial, the transformation is efficient.</p>
+                        <p><strong>Step 1: Copy the Vertices</strong> - The computer looks at <i>N</i> vertices in
+                            <i>G</i> and creates <i>N</i> cities in <i>G'</i>. <br><em>Complexity: O(N)</em>
+                        </p>
+
+                        <p><strong>Step 2 & 3: Create Complete Graph & Assign Weights</strong> - The computer draws an
+                            edge between every pair of vertices. In a graph with <i>N</i> vertices, there are exactly
+                            N(N-1)/2 possible pairs. <br><em>Complexity: O(N^2)</em></p>
+
+                        <p><strong>Step 4: Set the Budget Constraint</strong> - Assigns <i>X = N</i>.
+                            <br><em>Complexity: O(1)</em>
+                        </p>
+
+                        <p><strong>The Final Tally:</strong> The total time is O(N) + O(N^2) + O(1), which simplifies to
+                            <strong>O(N^2)</strong>. Since N^2 is a polynomial, the transformation is efficient.
+                        </p>
                     </div>
 
                     <h4 style="color: var(--primary); margin-top: 15px;">Conclusion</h4>
-                    <p>By proving the <strong>forward direction</strong>, the <strong>backward direction</strong>, and the <strong>polynomial-time construction</strong>, we have formally proven that the <strong>Traveling Salesperson Problem (Decision Version) is NP-Complete!</strong></p>
+                    <p>By proving the <strong>forward direction</strong>, the <strong>backward direction</strong>, and
+                        the <strong>polynomial-time construction</strong>, we have formally proven that the
+                        <strong>Traveling Salesperson Problem (Decision Version) is NP-Complete!</strong>
+                    </p>
                 </div>
             </div>
         </details>
@@ -607,11 +710,11 @@
     </div>
 
     <div class="workspace">
-        
+
         <!-- LEFT PANEL: Controls -->
         <div class="panel">
             <div class="panel-title">⚙️ Controls</div>
-            
+
             <div class="control-group">
                 <label>Mode</label>
                 <select id="mode-select" onchange="switchMode()">
@@ -638,7 +741,8 @@
                 <div class="control-group">
                     <label>Number of Nodes (1-10)</label>
                     <input type="number" id="node-count" value="5" min="1" max="10" oninput="enforceLimit(this)">
-                    <button class="btn-primary" onclick="generateGraph()" style="margin-top: 5px;">Generate Graph</button>
+                    <button class="btn-primary" onclick="generateGraph()" style="margin-top: 5px;">Generate
+                        Graph</button>
                 </div>
 
                 <div class="control-group">
@@ -664,26 +768,31 @@
             <div id="compare-controls" class="hidden" style="flex-direction:column; gap:15px;">
                 <div class="control-group">
                     <label>Number of Nodes (1-10)</label>
-                    <input type="number" id="compare-node-count" value="8" min="1" max="10" oninput="enforceLimit(this)">
-                    <button class="btn-primary" onclick="generateCompareGraph()" style="margin-top: 5px;">Generate & Compare</button>
+                    <input type="number" id="compare-node-count" value="8" min="1" max="10"
+                        oninput="enforceLimit(this)">
+                    <button class="btn-primary" onclick="generateCompareGraph()" style="margin-top: 5px;">Generate &
+                        Compare</button>
                 </div>
-                <p style="font-size:12px; color:var(--muted);">Generates a graph and instantly runs both Greedy and 2-Opt to compare Tour Quality and Computation Time.</p>
+                <p style="font-size:12px; color:var(--muted);">Generates a graph and instantly runs both Greedy and
+                    2-Opt to compare Tour Quality and Computation Time.</p>
             </div>
 
             <div id="np-controls" class="hidden" style="flex-direction:column; gap:15px;">
                 <div class="control-group">
                     <label>Number of Nodes (3-10)</label>
                     <input type="number" id="np-node-count" value="6" min="3" max="10" oninput="enforceLimit(this)">
-                    <button class="btn-primary" onclick="generateNPGraph()" style="margin-top: 5px;">Generate New NP Instance</button>
+                    <button class="btn-primary" onclick="generateNPGraph()" style="margin-top: 5px;">Generate New NP
+                        Instance</button>
                 </div>
-                <p style="font-size:12px; color:var(--muted);">Shows how a Hamiltonian Cycle (HC) instance is reduced to a TSP instance by assigning weights.</p>
+                <p style="font-size:12px; color:var(--muted);">Shows how a Hamiltonian Cycle (HC) instance is reduced to
+                    a TSP instance by assigning weights.</p>
             </div>
 
         </div>
 
         <!-- CENTER PANEL: Visualizer -->
         <div class="panel" id="center-panel">
-            
+
             <!-- Normal Mode View -->
             <div id="normal-view" style="display:flex; flex-direction:column; gap:15px; height:100%;">
                 <div class="panel-title">🗺️ Map Visualizer</div>
@@ -725,12 +834,14 @@
                 <div class="side-by-side">
                     <div class="panel-title">Graph G (Hamiltonian Cycle)</div>
                     <div class="map-wrapper"><svg class="map-svg" id="np-g-svg"></svg></div>
-                    <p style="font-size:12px; color:var(--muted);">Edges in G represent valid connections. Does a cycle exist?</p>
+                    <p style="font-size:12px; color:var(--muted);">Edges in G represent valid connections. Does a cycle
+                        exist?</p>
                 </div>
                 <div class="side-by-side">
                     <div class="panel-title">Graph G' (TSP Reduction)</div>
                     <div class="map-wrapper"><svg class="map-svg" id="np-tsp-svg"></svg></div>
-                    <p style="font-size:12px; color:var(--muted);">Blue edges: Weight = 1. Red dotted: Weight = 2. Tour ≤ n iff HC exists.</p>
+                    <p style="font-size:12px; color:var(--muted);">Blue edges: Weight = 1. Red dotted: Weight = 2. Tour
+                        ≤ n iff HC exists.</p>
                 </div>
             </div>
 
@@ -835,14 +946,14 @@
         /* ========================
            INITIALIZATION & UI
            ======================== */
-        
+
         function switchMode() {
             currentMode = document.getElementById('mode-select').value;
-            
+
             document.getElementById('normal-controls').classList.add('hidden');
             document.getElementById('compare-controls').classList.add('hidden');
             document.getElementById('np-controls').classList.add('hidden');
-            
+
             document.getElementById('normal-view').classList.add('hidden');
             document.getElementById('compare-view').classList.remove('active');
             document.getElementById('np-view').classList.remove('active');
@@ -878,7 +989,7 @@
         function updateRightPanel() {
             const algo = document.getElementById('algo-select').value;
             const info = algoInfo[algo];
-            
+
             // Populate Pseudo
             const pBox = document.getElementById('pseudo-list');
             pBox.className = "pseudo";
@@ -922,7 +1033,7 @@
         /* ========================
            GRAPH GENERATION
            ======================== */
-        
+
         function getCanvasSize(svgId) {
             const svg = document.getElementById(svgId);
             return { w: svg.clientWidth || 400, h: svg.clientHeight || 400 };
@@ -933,17 +1044,17 @@
             const margin = 40;
             const centerX = w / 2;
             const centerY = h / 2;
-            
+
             for (let i = 0; i < n; i++) {
                 let x, y, tooClose;
                 let attempts = 0;
                 do {
                     // Bias towards center
-                    let r = Math.random() * (Math.min(w, h)/2 - margin);
+                    let r = Math.random() * (Math.min(w, h) / 2 - margin);
                     let theta = Math.random() * 2 * Math.PI;
                     x = centerX + r * Math.cos(theta);
                     y = centerY + r * Math.sin(theta);
-                    
+
                     tooClose = pts.some(p => Math.hypot(p.x - x, p.y - y) < 50);
                     attempts++;
                 } while (tooClose && attempts < 100);
@@ -978,7 +1089,7 @@
         function drawGraph(svgId, pts, edges = [], activeNodes = []) {
             const svg = document.getElementById(svgId);
             let html = '';
-            
+
             // Edges: {u, v, color, width, dash}
             edges.forEach(e => {
                 const u = pts[e.u], v = pts[e.v];
@@ -1007,7 +1118,7 @@
             const size = getCanvasSize('main-svg');
             nodes = generateNodes(n, size.w, size.h);
             adj = buildAdjacency(nodes);
-            
+
             renderMatrix(adj);
             updateRightPanel();
             resetSim();
@@ -1044,7 +1155,7 @@
         // Generator: Brute Force
         async function* genBrute() {
             yield { pseudo: 0, msg: "Initializing variables.", edges: [], active: [] };
-            
+
             function* permute(arr, m = []) {
                 if (arr.length === 0) yield m;
                 for (let i = 0; i < arr.length; i++) {
@@ -1053,28 +1164,28 @@
                     arr.splice(i, 0, curr[0]);
                 }
             }
-            
+
             const ids = nodes.map(n => n.id);
             const perms = permute(ids);
-            
+
             yield { pseudo: 1, msg: "Starting permutations evaluation.", edges: [], active: [] };
-            
+
             for (let p of perms) {
                 stepCounter++;
                 let edges = [];
                 let d = 0;
                 for (let i = 0; i < p.length; i++) {
-                    const u = p[i], v = p[(i+1)%p.length];
+                    const u = p[i], v = p[(i + 1) % p.length];
                     d += adj[u][v];
-                    edges.push({u, v, color: 'var(--primary)', width: 2});
+                    edges.push({ u, v, color: 'var(--primary)', width: 2 });
                 }
-                
+
                 yield { pseudo: 2, msg: `Evaluating Path: ${p.join('-')}. Cost = ${d}`, edges, active: p };
-                
+
                 yield { pseudo: 3, msg: `Check if ${d} < ${bestFoundCost === Infinity ? '∞' : bestFoundCost}`, edges, active: p };
-                
+
                 if (d < bestFoundCost) {
-                    yield { pseudo: 4, msg: `New shortest tour found! Cost: ${d}`, edges: edges.map(e => ({...e, color: 'var(--success)', width: 3})), active: p, cost: d, success: true };
+                    yield { pseudo: 4, msg: `New shortest tour found! Cost: ${d}`, edges: edges.map(e => ({ ...e, color: 'var(--success)', width: 3 })), active: p, cost: d, success: true };
                 }
             }
             yield { pseudo: 5, msg: "All permutations checked. Returning best path.", edges: [], active: [] };
@@ -1084,16 +1195,16 @@
         async function* genGreedy() {
             let tour = [0];
             let visited = new Set([0]);
-            
+
             yield { pseudo: 0, msg: "Start at Node 0.", edges: [], active: [0] };
-            
+
             while (visited.size < nodes.length) {
                 stepCounter++;
                 yield { pseudo: 1, msg: `Unvisited nodes remain.`, active: tour };
-                
+
                 let last = tour[tour.length - 1];
                 yield { pseudo: 2, msg: `Current node is ${last}.`, active: [last] };
-                
+
                 let nearest = -1, minDist = Infinity;
                 for (let i = 0; i < nodes.length; i++) {
                     if (!visited.has(i) && adj[last][i] < minDist) {
@@ -1101,23 +1212,23 @@
                         nearest = i;
                     }
                 }
-                
-                yield { pseudo: 3, msg: `Nearest unvisited to ${last} is ${nearest} (Dist: ${minDist}).`, active: [last, nearest], edges: [{u:last, v:nearest, color:'var(--warning)', width:2, dash:'4'}] };
-                
+
+                yield { pseudo: 3, msg: `Nearest unvisited to ${last} is ${nearest} (Dist: ${minDist}).`, active: [last, nearest], edges: [{ u: last, v: nearest, color: 'var(--warning)', width: 2, dash: '4' }] };
+
                 tour.push(nearest);
                 visited.add(nearest);
-                
+
                 let curEdges = [];
-                for (let i = 0; i < tour.length - 1; i++) curEdges.push({u:tour[i], v:tour[i+1], color:'var(--primary)', width:2});
-                
+                for (let i = 0; i < tour.length - 1; i++) curEdges.push({ u: tour[i], v: tour[i + 1], color: 'var(--primary)', width: 2 });
+
                 yield { pseudo: 4, msg: `Added ${nearest} to tour.`, active: tour, edges: curEdges };
             }
-            
+
             let finalEdges = [];
             let totalD = 0;
             for (let i = 0; i < tour.length; i++) {
-                const u = tour[i], v = tour[(i+1)%tour.length];
-                finalEdges.push({u, v, color:'var(--success)', width:3});
+                const u = tour[i], v = tour[(i + 1) % tour.length];
+                finalEdges.push({ u, v, color: 'var(--success)', width: 3 });
                 totalD += adj[u][v];
             }
             stepCounter++;
@@ -1129,36 +1240,36 @@
             // First run Greedy silently to get initial tour
             let t = [0], v = new Set([0]);
             while (v.size < nodes.length) {
-                let l = t[t.length-1], n = -1, min = Infinity;
+                let l = t[t.length - 1], n = -1, min = Infinity;
                 for (let i = 0; i < nodes.length; i++) if (!v.has(i) && adj[l][i] < min) { min = adj[l][i]; n = i; }
                 t.push(n); v.add(n);
             }
-            
-            let getD = (path) => path.reduce((s, c, i) => s + adj[c][path[(i+1)%path.length]], 0);
+
+            let getD = (path) => path.reduce((s, c, i) => s + adj[c][path[(i + 1) % path.length]], 0);
             let tour = [...t];
             let cost = getD(tour);
-            
-            let drawTour = (p, color) => p.map((c, i) => ({u:c, v:p[(i+1)%p.length], color: color, width: 2}));
-            
+
+            let drawTour = (p, color) => p.map((c, i) => ({ u: c, v: p[(i + 1) % p.length], color: color, width: 2 }));
+
             yield { pseudo: 0, msg: `Initial Greedy Tour Cost: ${cost}`, edges: drawTour(tour, 'var(--primary)'), active: tour, cost: cost };
-            
+
             let improved = true;
             while (improved) {
                 stepCounter++;
                 yield { pseudo: 2, msg: `Looking for improvements...`, edges: drawTour(tour, 'var(--primary)'), active: [] };
                 improved = false;
-                
+
                 for (let i = 1; i < tour.length - 2; i++) {
                     for (let k = i + 1; k < tour.length - 1; k++) {
-                        
-                        yield { pseudo: 4, msg: `Checking swap between edges (${tour[i-1]}-${tour[i]}) and (${tour[k]}-${tour[k+1]}).`, edges: drawTour(tour, 'var(--primary)'), active: [tour[i-1], tour[i], tour[k], tour[k+1]] };
-                        
+
+                        yield { pseudo: 4, msg: `Checking swap between edges (${tour[i - 1]}-${tour[i]}) and (${tour[k]}-${tour[k + 1]}).`, edges: drawTour(tour, 'var(--primary)'), active: [tour[i - 1], tour[i], tour[k], tour[k + 1]] };
+
                         // 2-opt swap logic: reverse segment i to k
-                        let newTour = tour.slice(0, i).concat(tour.slice(i, k+1).reverse()).concat(tour.slice(k+1));
+                        let newTour = tour.slice(0, i).concat(tour.slice(i, k + 1).reverse()).concat(tour.slice(k + 1));
                         let newCost = getD(newTour);
-                        
+
                         yield { pseudo: 5, msg: `Cost after swap would be: ${newCost}`, edges: drawTour(newTour, 'var(--warning)'), active: [] };
-                        
+
                         if (newCost < cost) {
                             tour = newTour;
                             cost = newCost;
@@ -1182,7 +1293,7 @@
             document.getElementById('log-box').innerHTML = '<div class="log-entry">Simulation reset. Press Step or Play to begin.</div>';
             highlightPseudo(null);
             drawGraph('main-svg', nodes, []);
-            
+
             const algo = document.getElementById('algo-select').value;
             if (algo === 'brute') simGen = genBrute();
             else if (algo === 'greedy') simGen = genGreedy();
@@ -1228,16 +1339,16 @@
         /* ========================
            COMPARE MODE
            ======================== */
-        
+
         async function generateCompareGraph() {
             const n = parseInt(document.getElementById('compare-node-count').value) || 8;
             const size = getCanvasSize('compare-greedy-svg');
             const compNodes = generateNodes(n, size.w, size.h);
             const compAdj = buildAdjacency(compNodes);
-            
+
             drawGraph('compare-greedy-svg', compNodes, []);
             drawGraph('compare-twoopt-svg', compNodes, []);
-            
+
             document.getElementById('comp-greedy-cost').innerText = 'Computing...';
             document.getElementById('comp-twoopt-cost').innerText = 'Computing...';
 
@@ -1248,15 +1359,15 @@
             let t1 = performance.now();
             let t = [0], v = new Set([0]);
             while (v.size < compNodes.length) {
-                let l = t[t.length-1], nx = -1, min = Infinity;
+                let l = t[t.length - 1], nx = -1, min = Infinity;
                 for (let i = 0; i < compNodes.length; i++) if (!v.has(i) && compAdj[l][i] < min) { min = compAdj[l][i]; nx = i; }
                 t.push(nx); v.add(nx);
             }
-            let getD = (path) => path.reduce((s, c, i) => s + compAdj[c][path[(i+1)%path.length]], 0);
+            let getD = (path) => path.reduce((s, c, i) => s + compAdj[c][path[(i + 1) % path.length]], 0);
             let greedyCost = getD(t);
             let t2 = performance.now();
-            
-            drawGraph('compare-greedy-svg', compNodes, t.map((c, i) => ({u:c, v:t[(i+1)%t.length], color:'var(--warning)', width:2})));
+
+            drawGraph('compare-greedy-svg', compNodes, t.map((c, i) => ({ u: c, v: t[(i + 1) % t.length], color: 'var(--warning)', width: 2 })));
             document.getElementById('comp-greedy-cost').innerText = greedyCost;
             document.getElementById('comp-greedy-time').innerText = (t2 - t1).toFixed(2) + ' ms';
 
@@ -1269,7 +1380,7 @@
                 improved = false;
                 for (let i = 1; i < tour.length - 2; i++) {
                     for (let k = i + 1; k < tour.length - 1; k++) {
-                        let newTour = tour.slice(0, i).concat(tour.slice(i, k+1).reverse()).concat(tour.slice(k+1));
+                        let newTour = tour.slice(0, i).concat(tour.slice(i, k + 1).reverse()).concat(tour.slice(k + 1));
                         let newCost = getD(newTour);
                         if (newCost < cost) {
                             tour = newTour;
@@ -1283,7 +1394,7 @@
             }
             let t4 = performance.now();
 
-            drawGraph('compare-twoopt-svg', compNodes, tour.map((c, i) => ({u:c, v:tour[(i+1)%tour.length], color:'var(--success)', width:2})));
+            drawGraph('compare-twoopt-svg', compNodes, tour.map((c, i) => ({ u: c, v: tour[(i + 1) % tour.length], color: 'var(--success)', width: 2 })));
             document.getElementById('comp-twoopt-cost').innerText = cost;
             document.getElementById('comp-twoopt-time').innerText = (t4 - t3).toFixed(2) + ' ms';
         }
@@ -1295,7 +1406,7 @@
         function generateNPGraph() {
             const n = parseInt(document.getElementById('np-node-count').value) || 6;
             const size = getCanvasSize('np-g-svg');
-            
+
             // Circular layout for clarity
             const centerX = size.w / 2;
             const centerY = size.h / 2;
@@ -1309,26 +1420,26 @@
                     y: centerY + radius * Math.sin(angle)
                 });
             }
-            
+
             // Randomize the order of nodes for the Hamiltonian Cycle to generate a "new" instance
             let cycleOrder = nodes.map(n => n.id).sort(() => Math.random() - 0.5);
             if (cycleOrder.length < n) {
                 // fallback if nodes not initialized correctly for some reason
                 cycleOrder = [0, 1, 2, 3, 4, 5].sort(() => Math.random() - 0.5);
             }
-            
+
             let hcEdges = [];
-            for(let i=0; i<n; i++) {
-                hcEdges.push({u: cycleOrder[i], v: cycleOrder[(i+1)%n], color: 'var(--primary)', width: 3});
+            for (let i = 0; i < n; i++) {
+                hcEdges.push({ u: cycleOrder[i], v: cycleOrder[(i + 1) % n], color: 'var(--primary)', width: 3 });
             }
-            
+
             // Add a few random extra edges (that are NOT in the cycle) to make it non-trivial
             let attempts = 0;
             while (hcEdges.length < n + 2 && attempts < 50) {
                 let u = Math.floor(Math.random() * n);
                 let v = Math.floor(Math.random() * n);
-                if (u !== v && !hcEdges.some(e => (e.u===u && e.v===v) || (e.u===v && e.v===u))) {
-                    hcEdges.push({u: u, v: v, color: 'var(--primary)', width: 3});
+                if (u !== v && !hcEdges.some(e => (e.u === u && e.v === v) || (e.u === v && e.v === u))) {
+                    hcEdges.push({ u: u, v: v, color: 'var(--primary)', width: 3 });
                 }
                 attempts++;
             }
@@ -1338,12 +1449,12 @@
             // Create TSP Graph (Complete graph)
             let tspEdges = [];
             for (let i = 0; i < n; i++) {
-                for (let j = i+1; j < n; j++) {
-                    const inG = hcEdges.some(e => (e.u===i && e.v===j) || (e.u===j && e.v===i));
+                for (let j = i + 1; j < n; j++) {
+                    const inG = hcEdges.some(e => (e.u === i && e.v === j) || (e.u === j && e.v === i));
                     if (inG) {
-                        tspEdges.push({u: i, v: j, color: 'var(--primary)', width: 3}); // Weight 1
+                        tspEdges.push({ u: i, v: j, color: 'var(--primary)', width: 3 }); // Weight 1
                     } else {
-                        tspEdges.push({u: i, v: j, color: 'var(--danger)', width: 2, dash: '5,5'}); // Weight 2
+                        tspEdges.push({ u: i, v: j, color: 'var(--danger)', width: 2, dash: '5,5' }); // Weight 2
                     }
                 }
             }
@@ -1362,4 +1473,5 @@
 
     </script>
 </body>
+
 </html>
