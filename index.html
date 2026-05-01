@@ -231,6 +231,110 @@
             height: 100%;
         }
 
+        /* Status Badge */
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: var(--panel-hover);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--muted);
+        }
+
+        .status-badge.running {
+            background: rgba(14, 165, 233, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+        }
+
+        .status-badge.running::before {
+            background: var(--primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-badge.finished {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .status-badge.finished::before {
+            background: var(--success);
+        }
+
+        .status-badge.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .status-badge.warning::before {
+            background: var(--warning);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.5);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Tutorial Modal Specifics */
+        .tutorial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tutorial-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .tutorial-item h4 {
+            color: var(--primary);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .tutorial-item p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
         /* Stats Bar */
         .stats-bar {
             display: flex;
@@ -409,6 +513,13 @@
             background-color: var(--panel-hover);
         }
 
+        table.matrix td.active-cell {
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
         /* Modal overlay */
         .modal-overlay {
             position: fixed;
@@ -497,6 +608,42 @@
 
         .side-by-side .map-wrapper {
             height: 300px;
+        }
+
+        /* Growth Chart */
+        .chart-container {
+            margin-top: 20px;
+            background: #020617;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 250px;
+            overflow: visible;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 3px;
+            border-radius: 2px;
         }
 
         /* Hide elements dynamically */
@@ -692,9 +839,72 @@
 
                     <h4 style="color: var(--primary); margin-top: 15px;">Conclusion</h4>
                     <p>By proving the <strong>forward direction</strong>, the <strong>backward direction</strong>, and
-                        the <strong>polynomial-time construction</strong>, we have formally proven that the
+                        the
+                        <strong>polynomial-time construction</strong>, we have formally proven that the
                         <strong>Traveling Salesperson Problem (Decision Version) is NP-Complete!</strong>
                     </p>
+
+                    <h3>Theoretical Performance & Approximation</h3>
+                    <div
+                        style="background: rgba(14, 165, 233, 0.05); padding: 15px; border-radius: 12px; border: 1px solid var(--primary); margin: 15px 0;">
+                        <h4 style="color: var(--text); margin-bottom: 8px;">1. Definition of Approximation Ratio (ρ)
+                        </h4>
+                        <p>When evaluating non-exact algorithms (heuristics) for NP-Hard problems, we measure their
+                            worst-case performance using the <strong>Approximation Ratio</strong>.
+                            It is defined as the maximum ratio between the cost of the tour produced by the algorithm
+                            (<i>C</i>) and the cost of the true optimal tour (<i>C_OPT</i>):</p>
+                        <p
+                            style="font-family: 'Courier New', Courier, monospace; text-align: center; margin: 10px 0; font-size: 16px; color: var(--primary);">
+                            ρ = max ( C / C_OPT )</p>
+                        <p>An algorithm with an approximation ratio of 1.5, for example, is guaranteed to never produce
+                            a route more than 50% longer than the mathematically perfect route.</p>
+                    </div>
+
+                    <h4 style="color: var(--primary); margin-top: 15px;">2. The Nearest-Neighbor Limitation</h4>
+                    <p>While the Nearest-Neighbor (NN) algorithm is computationally fast (O(N²)), it is
+                        <strong>mathematically fragile</strong>.
+                        Crucially, Nearest-Neighbor does not have a constant approximation ratio for the general metric
+                        TSP. Instead, its performance grows worse as the number of cities (<i>N</i>) increases:</p>
+                    <p
+                        style="font-family: 'Courier New', Courier, monospace; text-align: center; margin: 10px 0; font-size: 16px; color: var(--warning);">
+                        ρ_NN = Θ(log N)</p>
+                    <p>This means there is no strict upper ceiling on how poorly the algorithm can perform. As the map
+                        grows larger, the worst-case penalty incurred by NN's greedy, short-term choices gets
+                        unboundedly worse compared to the optimal route.</p>
+
+                    <h4 style="color: var(--primary); margin-top: 15px;">3. Theoretical Benchmarks</h4>
+                    <p>To guarantee a constant approximation ratio in metric TSP, more sophisticated algorithms are
+                        required:</p>
+                    <ul>
+                        <li><strong>Minimum Spanning Tree (MST) Heuristic:</strong> Guarantees ρ = 2 (the route will
+                            never be worse than double the optimal).</li>
+                        <li><strong>Christofides Algorithm:</strong> The long-standing theoretical gold standard,
+                            guaranteeing ρ = 1.5 by elegantly combining an MST with perfect matching for odd-degree
+                            vertices.</li>
+                    </ul>
+
+                    <h3>Complexity Growth Curve</h3>
+                    <p>This chart visualizes why Brute Force becomes impossible even for small groups of cities. While
+                        Nearest Neighbor and 2-Opt scale smoothly, the Factorial complexity of Brute Force "explodes"
+                        almost vertically.</p>
+
+                    <div class="chart-container">
+                        <svg id="growth-chart" class="chart-svg" viewBox="0 0 400 200"></svg>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background:var(--danger)"></div> <span>Brute Force
+                                    O(n!)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background:var(--primary)"></div> <span>Nearest
+                                    Neighbor O(n²)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background:var(--success)"></div> <span>2-Opt
+                                    O(n²)</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </details>
@@ -709,11 +919,63 @@
         </div>
     </div>
 
+    <!-- Tutorial Modal -->
+    <div class="modal-overlay" id="tutorial-modal">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-title">🚀 Welcome to TSP Visualizer</div>
+            <div class="modal-body">
+                <p>This tool is designed to teach you the complexities of the Traveling Salesman Problem (TSP) and
+                    NP-Completeness.</p>
+                <div class="tutorial-grid">
+                    <div class="tutorial-item">
+                        <h4>🗺️ Visualizer Mode</h4>
+                        <p>Step through algorithms like Brute Force, Greedy, and 2-Opt. Watch the "Status Badge" for
+                            real-time states.</p>
+                    </div>
+                    <div class="tutorial-item">
+                        <h4>💻 Interactive Code</h4>
+                        <p>Click any line of <b>Pseudocode</b> on the right to see its mathematical and practical
+                            explanation.</p>
+                    </div>
+                    <div class="tutorial-item">
+                        <h4>📊 Compare Mode</h4>
+                        <p>Run <b>Greedy vs 2-Opt</b> on the same map to compare accuracy and computational time
+                            instantly.</p>
+                    </div>
+                    <div class="tutorial-item">
+                        <h4>📉 Complexity Graph</h4>
+                        <p>Expand the <b>Theory Guide</b> above to see the interactive growth curve of O(n!) vs O(n²).
+                        </p>
+                    </div>
+                    <div class="tutorial-item" style="grid-column: span 2;">
+                        <h4>🔗 NP-Completeness Mode</h4>
+                        <p>Learn the formal "Reduction" by seeing how a Hamiltonian Cycle instance transforms into a TSP
+                            problem with a budget constraint.</p>
+                    </div>
+                    <div class="tutorial-item" style="grid-column: span 2; border-color: var(--warning);">
+                        <h4>🕹️ Simulation Controls</h4>
+                        <p><b>Play:</b> Auto-run. | <b>Stop:</b> Pause. | <b>Reset:</b> Restart.<br>
+                        <b>Prev/Next Step:</b> Navigate the simulation "Time-Machine" backward and forward.<br>
+                        <b>Skip to End:</b> Instantly jump to the final optimal path and results.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close" onclick="closeTutorial()">Get Started</button>
+        </div>
+    </div>
+
     <div class="workspace">
 
         <!-- LEFT PANEL: Controls -->
-        <div class="panel">
+        <div class="panel" id="left-panel">
             <div class="panel-title">⚙️ Controls</div>
+
+            <!-- Help Button (Moved to top) -->
+            <div class="control-group" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
+                <button class="btn-primary" onclick="showTutorial()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <span>❓</span> Help & Tutorial
+                </button>
+            </div>
 
             <div class="control-group">
                 <label>Mode</label>
@@ -759,9 +1021,12 @@
 
                 <div class="btn-grid">
                     <button id="btn-play" class="btn-primary" onclick="togglePlay()">Play</button>
-                    <button id="btn-step" onclick="stepSim()">Step</button>
+                    <button id="btn-back" onclick="backSim()">Prev Step</button>
+                    <button id="btn-step" onclick="stepSim()">Next Step</button>
+                    <button id="btn-skip" onclick="skipToEnd()">Skip to End</button>
                     <button id="btn-stop" onclick="stopSim()">Stop</button>
-                    <button id="btn-reset" class="btn-danger" onclick="resetSim()">Reset</button>
+                    <button id="btn-reset" class="btn-danger" onclick="resetSim()" style="grid-column: span 2;">Reset
+                        Simulation</button>
                 </div>
             </div>
 
@@ -788,6 +1053,17 @@
                     a TSP instance by assigning weights.</p>
             </div>
 
+            <!-- Real-Life Application Box -->
+            <div class="control-group" style="margin-top: 20px; background: rgba(14, 165, 233, 0.05); padding: 12px; border-radius: 8px; border: 1px solid var(--primary);">
+                <div class="panel-title" style="font-size: 13px; margin-bottom: 8px;">🌍 Real-Life Applications</div>
+                <ul style="font-size: 11px; color: var(--muted); padding-left: 15px; list-style-type: disc;">
+                    <li style="margin-bottom: 5px;"><b>Logistics:</b> Routing delivery trucks (DHL/UPS) to save millions in fuel.</li>
+                    <li style="margin-bottom: 5px;"><b>Manufacturing:</b> Optimizing laser movements for PCB drilling.</li>
+                    <li style="margin-bottom: 5px;"><b>Genetics:</b> Reconstructing DNA sequences from overlapping fragments.</li>
+                    <li><b>Astronomy:</b> Scheduling telescope observations across the night sky.</li>
+                </ul>
+            </div>
+
         </div>
 
         <!-- CENTER PANEL: Visualizer -->
@@ -797,11 +1073,22 @@
             <div id="normal-view" style="display:flex; flex-direction:column; gap:15px; height:100%;">
                 <div class="panel-title">🗺️ Map Visualizer</div>
                 <div class="map-wrapper">
+                    <div id="status-badge" class="status-badge">Idle</div>
                     <svg class="map-svg" id="main-svg"></svg>
                 </div>
-                <div class="stats-bar">
-                    <span>Steps: <span id="step-count">0</span></span>
-                    <span>Best Cost: <span id="best-cost">∞</span></span>
+                
+                <div id="final-results-container" style="display: none; justify-content: space-between; align-items: center; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); padding: 10px; border-radius: 8px; color: var(--success); font-weight: bold;">
+                    <span>🏆 Best Cost: <span id="final-best-cost">-</span></span>
+                    <span style="font-size: 11px;">Final Optimal Path: <span id="final-res-path">-</span></span>
+                </div>
+
+                <div class="stats-bar" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>Step: <span id="step-count">0</span> / <span id="total-steps">-</span></div>
+                    <div>Pass: <span id="pass-count">0</span> / <span id="total-passes">-</span></div>
+                    
+                    <div id="current-stat" style="grid-column: span 2; font-size: 11px; color: var(--muted); border-top: 1px dotted var(--border); margin-top: 5px; padding-top: 5px;">
+                        Current: <span id="curr-path">-</span> | Cost: <span id="curr-cost">0</span>
+                    </div>
                 </div>
                 <div class="panel-title" style="margin-top: 5px;">📝 Step-by-Step Explanation</div>
                 <div class="log-box" id="log-box">
@@ -831,6 +1118,14 @@
 
             <!-- NP-Completeness Mode View -->
             <div id="np-view" class="np-view">
+                <div class="side-by-side" style="grid-column: span 2;">
+                    <div class="panel-title">Proof Structure: Reduction Flowchart</div>
+                    <div
+                        style="background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 15px;">
+                        <svg id="np-flowchart-svg" viewBox="0 0 800 120"
+                            style="width:100%; height:auto; overflow:visible;"></svg>
+                    </div>
+                </div>
                 <div class="side-by-side">
                     <div class="panel-title">Graph G (Hamiltonian Cycle)</div>
                     <div class="map-wrapper"><svg class="map-svg" id="np-g-svg"></svg></div>
@@ -884,12 +1179,18 @@
         const algoInfo = {
             brute: {
                 pseudo: [
-                    { line: "bestDist = ∞, bestPath = null", exp: "Initialize the best distance to infinity and path to null." },
-                    { line: "for each permutation P of nodes:", exp: "Generate every possible permutation (ordering) of the cities. This is exhaustive." },
-                    { line: "&nbsp;&nbsp;d = calculateDistance(P)", exp: "Sum the weights of the edges for the current permutation." },
-                    { line: "&nbsp;&nbsp;if d < bestDist:", exp: "Check if the current permutation's distance is strictly less than the best found so far." },
-                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;bestDist = d; bestPath = P", exp: "If it is shorter, update the record for best distance and best path." },
-                    { line: "return bestPath", exp: "After checking all permutations, return the absolute shortest tour." }
+                    { line: "min_cost = INFINITY, best_path = []", exp: "Initialize the tracker for the shortest distance found so far." },
+                    { line: "vertices_to_visit = GetAll(Graph) - {Start}", exp: "The salesperson must visit every city except where they already are." },
+                    { line: "all_perms = GeneratePermutations(vertices)", exp: "Calculate every possible order of visiting the remaining cities." },
+                    { line: "for each permutation in all_perms:", exp: "Iteratively evaluate every single unique sequence." },
+                    { line: "&nbsp;&nbsp;current_cost = 0, current_v = Start", exp: "Reset the path cost and starting point for this specific trial." },
+                    { line: "&nbsp;&nbsp;for next_v in permutation:", exp: "Traverse the current permutation city by city." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;current_cost += Distance(current_v, next_v)", exp: "Accumulate the distance from the last city to the next one." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;current_v = next_v", exp: "Move the salesperson to the next city in the sequence." },
+                    { line: "&nbsp;&nbsp;current_cost += Distance(current_v, Start)", exp: "Close the loop by adding the distance back to the origin city." },
+                    { line: "&nbsp;&nbsp;if current_cost < min_cost:", exp: "Check if this complete tour is shorter than our previous record." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;min_cost = cost, best_path = path", exp: "Update the record-holder with the new shortest distance and route." },
+                    { line: "return min_cost, best_path", exp: "Return the absolute mathematical optimum for this map." }
                 ],
                 comp: [
                     { name: "Best Time: O(n!)", exp: "Even in the best case, Brute Force must generate and evaluate all n! permutations." },
@@ -899,12 +1200,20 @@
             },
             greedy: {
                 pseudo: [
-                    { line: "tour = [startNode], visited = {startNode}", exp: "Start at an arbitrary node and mark it as visited." },
-                    { line: "while unvisited nodes exist:", exp: "Continue the loop until all n nodes are part of the tour." },
-                    { line: "&nbsp;&nbsp;last = tour.last()", exp: "Look at the most recently added node in the tour." },
-                    { line: "&nbsp;&nbsp;next = findNearestUnvisited(last)", exp: "Greedy choice: scan all unvisited neighbors and pick the one with the smallest edge weight." },
-                    { line: "&nbsp;&nbsp;tour.push(next); visited.add(next)", exp: "Add the nearest neighbor to the tour and mark it." },
-                    { line: "tour.push(startNode); return tour", exp: "Complete the cycle by returning to the start node." }
+                    { line: "path = [StartVertex], current_v = StartVertex, total_dist = 0", exp: "Initialize the tour path, the current location, and the distance counter." },
+                    { line: "visited = {StartVertex}, total_cities = count(Graph)", exp: "Mark the start city as visited and get the target city count." },
+                    { line: "while length(visited) < total_cities:", exp: "Continue the search until every city on the map has been visited once." },
+                    { line: "&nbsp;&nbsp;nearest = NULL, shortest_d = INFINITY", exp: "Reset the search variables to find the closest neighbor for the current city." },
+                    { line: "&nbsp;&nbsp;for each candidate_city in Graph:", exp: "Scan every city in the graph to evaluate its distance from the current position." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;if candidate_city not in visited:", exp: "Only consider cities that haven't been added to our path yet." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist = Distance(current_v, candidate_city)", exp: "Calculate the mathematical distance to the potential next stop." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if dist < shortest_d:", exp: "Check if this candidate is closer than any previously scanned city." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shortest_d = dist, nearest = candidate_city", exp: "Record this city as our current 'Greedy' best choice." },
+                    { line: "&nbsp;&nbsp;path.append(nearest), visited.add(nearest)", exp: "Commit to the nearest city: add it to the tour and mark it as visited." },
+                    { line: "&nbsp;&nbsp;total_dist += shortest_d, current_v = nearest", exp: "Update the total distance and move the salesperson to the new city." },
+                    { line: "final_leg = Distance(current_v, StartVertex)", exp: "Calculate the return trip distance from the last city back to the beginning." },
+                    { line: "total_dist += final_leg, path.append(StartVertex)", exp: "Add the return distance to the total and close the tour sequence." },
+                    { line: "return total_dist, path", exp: "Return the final Greedy tour and its total distance." }
                 ],
                 comp: [
                     { name: "Best Time: O(n²)", exp: "For each of the n nodes, we scan up to n unvisited nodes to find the minimum." },
@@ -914,14 +1223,18 @@
             },
             twoopt: {
                 pseudo: [
-                    { line: "tour = greedyPath()", exp: "Initialize the tour using a fast heuristic like Nearest Neighbor." },
-                    { line: "improved = true", exp: "Flag to track if the last iteration made an improvement." },
-                    { line: "while improved:", exp: "Keep looping as long as we keep finding shorter tours." },
-                    { line: "&nbsp;&nbsp;improved = false", exp: "Assume no improvement until we find one." },
-                    { line: "&nbsp;&nbsp;for i=1 to n-2, for k=i+1 to n-1:", exp: "Iterate over all possible pairs of non-adjacent edges to swap." },
-                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;if swap(i, k) reduces distance:", exp: "If reversing the segment between i and k results in a shorter total distance." },
-                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tour = swap(i, k); improved = true", exp: "Apply the 2-opt swap (untangling a crossing) and set flag to true." },
-                    { line: "return tour", exp: "Return the locally optimal tour." }
+                    { line: "improvement_made = true, best_dist = CalculateTotalDist(route)", exp: "Initialize optimization loop and calculate initial tour distance." },
+                    { line: "while improvement_made is true:", exp: "Continue untangling the tour as long as improvements are still being found." },
+                    { line: "&nbsp;&nbsp;improvement_made = false", exp: "Reset the improvement flag for this pass through the tour edges." },
+                    { line: "&nbsp;&nbsp;for i from 1 to length(route) - 2, for j from i + 1 to length(route) - 1:", exp: "Select every possible pair of non-adjacent edges to test for crossing untanglement." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;new_route = 2OptSwap(route, i, j)", exp: "Generate a candidate tour by reversing the segment between the chosen edges." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;new_dist = CalculateTotalDist(new_route)", exp: "Calculate the total distance of the proposed new tour." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;if new_dist < best_dist:", exp: "Check if the proposed swap actually results in a shorter path." },
+                    { line: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route = new_route, best_dist = new_dist, improved = true", exp: "Apply the swap, update our record, and mark that we found an improvement." },
+                    { line: "return route", exp: "Return the tour once no more untangling (improvements) can be made." },
+                    { line: "--- 2OptSwap Helper ---", exp: "The mathematical operation used to reverse a tour segment." },
+                    { line: "2OptSwap(route, i, j):", exp: "Reverse the part of the route between index i and j." },
+                    { line: "&nbsp;&nbsp;return route[0..i-1] + reverse(route[i..j]) + route[j+1..end]", exp: "Assemble the new route: prefix + reversed segment + suffix." }
                 ],
                 comp: [
                     { name: "Best Time: O(n²)", exp: "If the initial tour is already locally optimal, it takes O(n²) to verify it." },
@@ -940,8 +1253,13 @@
         let isPlaying = false;
         let simGen = null;
         let stepCounter = 0;
+        let passCounter = 0;
+        let totalSteps = 0;
+        let totalPasses = 0;
         let bestFoundCost = Infinity;
+        let bestTour = []; // Stores node sequence of best tour
         let playInterval = null;
+        let history = []; // Stores states for undo/redo
 
         /* ========================
            INITIALIZATION & UI
@@ -1030,6 +1348,15 @@
             document.getElementById('modal').classList.remove('show');
         }
 
+        function showTutorial() {
+            document.getElementById('tutorial-modal').classList.add('show');
+        }
+
+        function closeTutorial() {
+            document.getElementById('tutorial-modal').classList.remove('show');
+            localStorage.setItem('tsp_tutorial_seen', 'true');
+        }
+
         /* ========================
            GRAPH GENERATION
            ======================== */
@@ -1079,30 +1406,83 @@
             for (let i = 0; i < m.length; i++) {
                 html += `<tr><th>${i}</th>`;
                 for (let j = 0; j < m[i].length; j++) {
-                    html += `<td>${m[i][j]}</td>`;
+                    html += `<td id="cell-${i}-${j}">${m[i][j]}</td>`;
                 }
                 html += `</tr>`;
             }
             document.getElementById('cost-matrix').innerHTML = html;
         }
 
+        function highlightMatrix(u, v) {
+            document.querySelectorAll('#cost-matrix td').forEach(td => td.classList.remove('active-cell'));
+            if (u !== null && v !== null) {
+                const cell = document.getElementById(`cell-${u}-${v}`);
+                const reverseCell = document.getElementById(`cell-${v}-${u}`);
+                if (cell) cell.classList.add('active-cell');
+                if (reverseCell) reverseCell.classList.add('active-cell');
+            }
+        }
+
         function drawGraph(svgId, pts, edges = [], activeNodes = []) {
             const svg = document.getElementById(svgId);
-            let html = '';
+            const radius = 14;
+            
+            let html = `
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="context-stroke" />
+                    </marker>
+                    <marker id="arrowhead-active" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--primary)" />
+                    </marker>
+                    <marker id="arrowhead-success" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--success)" />
+                    </marker>
+                    <marker id="arrowhead-warning" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--warning)" />
+                    </marker>
+                </defs>
+            `;
 
             // Edges: {u, v, color, width, dash}
             edges.forEach(e => {
                 const u = pts[e.u], v = pts[e.v];
-                html += `<line x1="${u.x}" y1="${u.y}" x2="${v.x}" y2="${v.y}" 
-                    stroke="${e.color || 'var(--border)'}" 
-                    stroke-width="${e.width || 1}" 
-                    stroke-dasharray="${e.dash || ''}" />`;
+                const dx = v.x - u.x, dy = v.y - u.y;
+                const len = Math.hypot(dx, dy);
+                if (len === 0) return;
+
+                // Shorten line to stop at circle boundary
+                const x1 = u.x + (dx / len) * radius;
+                const y1 = u.y + (dy / len) * radius;
+                const x2 = v.x - (dx / len) * (radius + 2); // extra gap for arrowhead
+                const y2 = v.y - (dy / len) * (radius + 2);
+
+                const color = e.color || 'var(--border)';
+                let marker = 'url(#arrowhead)';
+                if (color.includes('--primary')) marker = 'url(#arrowhead-active)';
+                if (color.includes('--success')) marker = 'url(#arrowhead-success)';
+                if (color.includes('--warning')) marker = 'url(#arrowhead-warning)';
+
+                html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" 
+                    stroke="${color}" 
+                    stroke-width="${e.width || 1.5}" 
+                    stroke-dasharray="${e.dash || ''}"
+                    marker-end="${marker}" />`;
+
+                // Cost label
+                const dist = Math.round(len);
+                const midX = (u.x + v.x) / 2;
+                const midY = (u.y + v.y) / 2;
+                html += `
+                    <rect x="${midX - 10}" y="${midY - 8}" width="20" height="12" fill="var(--panel)" rx="2" opacity="0.8"/>
+                    <text x="${midX}" y="${midY + 1}" fill="${color}" font-size="9" font-weight="bold" text-anchor="middle">${dist}</text>
+                `;
             });
 
             // Nodes
             pts.forEach(p => {
                 const isActive = activeNodes.includes(p.id);
-                html += `<circle cx="${p.x}" cy="${p.y}" r="14" 
+                html += `<circle cx="${p.x}" cy="${p.y}" r="${radius}" 
                     fill="${isActive ? 'var(--primary)' : 'var(--panel)'}" 
                     stroke="${isActive ? 'white' : 'var(--primary)'}" stroke-width="2"/>
                     <text x="${p.x}" y="${p.y + 4}" fill="${isActive ? 'white' : 'var(--text)'}" 
@@ -1137,11 +1517,13 @@
         }
 
         function updateStats(cost) {
-            document.getElementById('step-count').innerText = stepCounter;
-            if (cost !== null && cost < bestFoundCost) {
-                bestFoundCost = cost;
-                document.getElementById('best-cost').innerText = cost;
-            }
+            // Handled dynamically by applyState for UI, and globally by generators for bestFoundCost.
+        }
+
+        function setStatus(text, type = 'idle') {
+            const badge = document.getElementById('status-badge');
+            badge.innerText = text;
+            badge.className = 'status-badge ' + type;
         }
 
         function highlightPseudo(index) {
@@ -1154,7 +1536,11 @@
 
         // Generator: Brute Force
         async function* genBrute() {
+            setStatus('Running', 'running');
             yield { pseudo: 0, msg: "Initializing variables.", edges: [], active: [] };
+
+            const idsToVisit = nodes.filter(n => n.id !== 0).map(n => n.id);
+            yield { pseudo: 1, msg: "Excluding Start Node 0 from permutations.", edges: [], active: [0] };
 
             function* permute(arr, m = []) {
                 if (arr.length === 0) yield m;
@@ -1165,153 +1551,323 @@
                 }
             }
 
-            const ids = nodes.map(n => n.id);
-            const perms = permute(ids);
-
-            yield { pseudo: 1, msg: "Starting permutations evaluation.", edges: [], active: [] };
+            const perms = permute(idsToVisit);
+            yield { pseudo: 2, msg: "Generating all permutations of remaining vertices.", edges: [], active: [] };
+            yield { pseudo: 3, msg: "Starting permutations evaluation.", edges: [], active: [] };
 
             for (let p of perms) {
-                stepCounter++;
+                passCounter++;
+                document.getElementById('pass-count').innerText = passCounter;
+                let partialPath = [0];
                 let edges = [];
                 let d = 0;
-                for (let i = 0; i < p.length; i++) {
-                    const u = p[i], v = p[(i + 1) % p.length];
-                    d += adj[u][v];
-                    edges.push({ u, v, color: 'var(--primary)', width: 2 });
+                let currentV = 0;
+                yield { pseudo: 4, msg: `Resetting cost for new permutation: ${p.join('-')}`, edges: [], active: [0], cost: 0 };
+                yield { pseudo: 5, msg: `Evaluating traversal...`, edges: [], active: [0], cost: 0 };
+
+                for (let nextV of p) {
+                    highlightMatrix(currentV, nextV);
+                    d += adj[currentV][nextV];
+                    edges.push({ u: currentV, v: nextV, color: 'var(--primary)', width: 2 });
+                    partialPath.push(nextV);
+                    yield { pseudo: 6, msg: `Moving from ${currentV} to ${nextV}. Cost: ${d}`, edges, active: [...partialPath], cost: d };
+                    currentV = nextV;
+                    yield { pseudo: 7, msg: `Updated current vertex to ${currentV}.`, edges, active: [...partialPath], cost: d };
                 }
 
-                yield { pseudo: 2, msg: `Evaluating Path: ${p.join('-')}. Cost = ${d}`, edges, active: p };
+                highlightMatrix(currentV, 0);
+                d += adj[currentV][0];
+                edges.push({ u: currentV, v: 0, color: 'var(--primary)', width: 2 });
+                partialPath.push(0);
+                yield { pseudo: 8, msg: `Returning to Start Node 0. Final Cost: ${d}`, edges, active: [...partialPath], cost: d };
 
-                yield { pseudo: 3, msg: `Check if ${d} < ${bestFoundCost === Infinity ? '∞' : bestFoundCost}`, edges, active: p };
+                const fullPath = [0, ...p, 0];
+                yield { pseudo: 9, msg: `Check if ${d} < ${bestFoundCost === Infinity ? '∞' : bestFoundCost}`, edges, active: fullPath, cost: d };
 
                 if (d < bestFoundCost) {
-                    yield { pseudo: 4, msg: `New shortest tour found! Cost: ${d}`, edges: edges.map(e => ({ ...e, color: 'var(--success)', width: 3 })), active: p, cost: d, success: true };
+                    bestFoundCost = d;
+                    bestTour = [...fullPath];
+                    yield { pseudo: 10, msg: `New shortest tour found! Cost: ${d}`, edges: edges.map(e => ({ ...e, color: 'var(--success)', width: 3 })), active: fullPath, cost: d, success: true };
+                } else {
+                    yield { pseudo: 10, msg: `Not shorter than current best.`, edges, active: fullPath, cost: d };
                 }
             }
-            yield { pseudo: 5, msg: "All permutations checked. Returning best path.", edges: [], active: [] };
+            setStatus('Optimized', 'finished');
+            yield { pseudo: 11, msg: "All permutations checked. Returning best path.", edges: [], active: [] };
         }
 
         // Generator: Greedy
         async function* genGreedy() {
-            let tour = [0];
+            setStatus('Running', 'running');
+            let path = [0];
             let visited = new Set([0]);
+            let total_dist = 0;
+            let current_v = 0;
 
-            yield { pseudo: 0, msg: "Start at Node 0.", edges: [], active: [0] };
+            yield { pseudo: 0, msg: "path = [0], current_v = 0, total_dist = 0", active: [0], cost: 0 };
+            yield { pseudo: 1, msg: "visited = {0}, total_cities = " + nodes.length, active: [0], cost: 0 };
 
             while (visited.size < nodes.length) {
-                stepCounter++;
-                yield { pseudo: 1, msg: `Unvisited nodes remain.`, active: tour };
+                passCounter++;
+                document.getElementById('pass-count').innerText = passCounter;
+                yield { pseudo: 2, msg: `While loop: ${visited.size} < ${nodes.length} cities visited.`, active: path, cost: total_dist };
+                
+                yield { pseudo: 3, msg: "Searching for nearest neighbor...", active: path, cost: total_dist };
 
-                let last = tour[tour.length - 1];
-                yield { pseudo: 2, msg: `Current node is ${last}.`, active: [last] };
-
-                let nearest = -1, minDist = Infinity;
+                let nearest = -1, shortest_d = Infinity;
                 for (let i = 0; i < nodes.length; i++) {
-                    if (!visited.has(i) && adj[last][i] < minDist) {
-                        minDist = adj[last][i];
-                        nearest = i;
+                    if (!visited.has(i)) {
+                        highlightMatrix(current_v, i);
+                        let d = adj[current_v][i];
+                        if (d < shortest_d) {
+                            shortest_d = d;
+                            nearest = i;
+                        }
                     }
                 }
 
-                yield { pseudo: 3, msg: `Nearest unvisited to ${last} is ${nearest} (Dist: ${minDist}).`, active: [last, nearest], edges: [{ u: last, v: nearest, color: 'var(--warning)', width: 2, dash: '4' }] };
+                // Yield at Line 8: the "winning" choice found after the scan
+                highlightMatrix(current_v, nearest);
+                yield { pseudo: 8, msg: `Nearest city found: ${nearest} (Dist: ${shortest_d})`, active: [...path, nearest], edges: [{ u: current_v, v: nearest, color: 'var(--warning)', width: 2, dash: '4' }], cost: total_dist };
 
-                tour.push(nearest);
+                path.push(nearest);
                 visited.add(nearest);
+                yield { pseudo: 9, msg: `path.append(${nearest}), visited.add(${nearest})`, active: path, cost: total_dist };
 
+                total_dist += shortest_d;
+                current_v = nearest;
+                
                 let curEdges = [];
-                for (let i = 0; i < tour.length - 1; i++) curEdges.push({ u: tour[i], v: tour[i + 1], color: 'var(--primary)', width: 2 });
-
-                yield { pseudo: 4, msg: `Added ${nearest} to tour.`, active: tour, edges: curEdges };
+                for (let i = 0; i < path.length - 1; i++) {
+                    curEdges.push({ u: path[i], v: path[i + 1], color: 'var(--primary)', width: 2 });
+                }
+                yield { pseudo: 10, msg: `total_dist += ${shortest_d}, current_v = ${nearest}`, active: path, edges: curEdges, cost: total_dist };
             }
 
+            let final_leg = adj[current_v][0];
+            yield { pseudo: 11, msg: `Calculating return trip to Start Node 0 (Dist: ${final_leg})`, active: path, cost: total_dist };
+
+            total_dist += final_leg;
+            path.push(0);
             let finalEdges = [];
-            let totalD = 0;
-            for (let i = 0; i < tour.length; i++) {
-                const u = tour[i], v = tour[(i + 1) % tour.length];
-                finalEdges.push({ u, v, color: 'var(--success)', width: 3 });
-                totalD += adj[u][v];
+            for (let i = 0; i < path.length - 1; i++) {
+                finalEdges.push({ u: path[i], v: path[i + 1], color: 'var(--success)', width: 3 });
             }
-            stepCounter++;
-            yield { pseudo: 5, msg: `Returned to start. Total Cost: ${totalD}`, active: tour, edges: finalEdges, cost: totalD, success: true };
+            yield { pseudo: 12, msg: `total_dist += ${final_leg}, path.append(0)`, active: path, edges: finalEdges, cost: total_dist };
+
+            bestFoundCost = total_dist;
+            bestTour = [...path];
+            setStatus('Finished', 'finished');
+            yield { pseudo: 13, msg: `Simulation complete. Final Distance: ${total_dist}`, active: path, edges: finalEdges, cost: total_dist, success: true };
         }
 
         // Generator: 2-Opt
         async function* genTwoOpt() {
+            setStatus('Running', 'running');
             // First run Greedy silently to get initial tour
+            let getD = (path) => path.reduce((s, c, i) => s + adj[c][path[(i + 1) % path.length]], 0);
+            let drawTour = (p, color) => p.map((c, i) => ({ u: c, v: p[(i + 1) % p.length], color: color, width: 2 }));
+            let twoOptSwap = (p, i, k) => p.slice(0, i).concat(p.slice(i, k + 1).reverse()).concat(p.slice(k + 1));
+
             let t = [0], v = new Set([0]);
             while (v.size < nodes.length) {
-                let l = t[t.length - 1], n = -1, min = Infinity;
-                for (let i = 0; i < nodes.length; i++) if (!v.has(i) && adj[l][i] < min) { min = adj[l][i]; n = i; }
-                t.push(n); v.add(n);
+                let last = t[t.length - 1], nearest = -1, minDist = Infinity;
+                for (let i = 0; i < nodes.length; i++) {
+                    if (!v.has(i)) {
+                        if (adj[last][i] < minDist) { minDist = adj[last][i]; nearest = i; }
+                    }
+                }
+                t.push(nearest); v.add(nearest);
             }
-
-            let getD = (path) => path.reduce((s, c, i) => s + adj[c][path[(i + 1) % path.length]], 0);
             let tour = [...t];
             let cost = getD(tour);
 
-            let drawTour = (p, color) => p.map((c, i) => ({ u: c, v: p[(i + 1) % p.length], color: color, width: 2 }));
-
-            yield { pseudo: 0, msg: `Initial Greedy Tour Cost: ${cost}`, edges: drawTour(tour, 'var(--primary)'), active: tour, cost: cost };
+            yield { pseudo: 0, msg: "Initial tour from Greedy. Cost: " + cost, edges: drawTour(tour, 'var(--primary)'), active: [...tour, 0], cost: cost };
 
             let improved = true;
             while (improved) {
-                stepCounter++;
-                yield { pseudo: 2, msg: `Looking for improvements...`, edges: drawTour(tour, 'var(--primary)'), active: [] };
+                yield { pseudo: 1, msg: "Checking for improvements...", edges: drawTour(tour, 'var(--primary)'), active: [...tour, 0], cost: cost };
                 improved = false;
+                yield { pseudo: 2, msg: "improvement_made = false", edges: drawTour(tour, 'var(--primary)'), active: [...tour, 0], cost: cost };
 
-                for (let i = 1; i < tour.length - 2; i++) {
-                    for (let k = i + 1; k < tour.length - 1; k++) {
+                for (let i = 1; i < nodes.length - 1; i++) {
+                    for (let k = i + 1; k < nodes.length; k++) {
+                        passCounter++;
+                        document.getElementById('pass-count').innerText = passCounter;
 
-                        yield { pseudo: 4, msg: `Checking swap between edges (${tour[i - 1]}-${tour[i]}) and (${tour[k]}-${tour[k + 1]}).`, edges: drawTour(tour, 'var(--primary)'), active: [tour[i - 1], tour[i], tour[k], tour[k + 1]] };
+                        yield { pseudo: 3, msg: `Testing swap for indices ${i} and ${k}`, edges: drawTour(tour, 'var(--primary)'), active: [tour[i - 1], tour[i], tour[k], tour[k % nodes.length]], cost: cost };
 
-                        // 2-opt swap logic: reverse segment i to k
-                        let newTour = tour.slice(0, i).concat(tour.slice(i, k + 1).reverse()).concat(tour.slice(k + 1));
-                        let newCost = getD(newTour);
+                        const newTour = twoOptSwap(tour, i, k);
+                        const newCost = getD(newTour);
 
-                        yield { pseudo: 5, msg: `Cost after swap would be: ${newCost}`, edges: drawTour(newTour, 'var(--warning)'), active: [] };
+                        // Pseudo 4: 2OptSwap
+                        yield { pseudo: 4, msg: `Reversing segment between ${tour[i]} and ${tour[k]}`, edges: drawTour(newTour, 'var(--warning)'), active: [...newTour, 0], cost: cost };
+                        
+                        // Pseudo 5: Calculate distance
+                        yield { pseudo: 5, msg: `Candidate tour cost: ${newCost}`, edges: drawTour(newTour, 'var(--warning)'), active: [...newTour, 0], cost: newCost };
+
+                        // Pseudo 6: If check
+                        yield { pseudo: 6, msg: `Is ${newCost} < ${cost}?`, edges: drawTour(newTour, 'var(--warning)'), active: [...newTour, 0], cost: newCost };
 
                         if (newCost < cost) {
                             tour = newTour;
                             cost = newCost;
                             improved = true;
-                            yield { pseudo: 6, msg: `Improvement found! New Best: ${cost}`, edges: drawTour(tour, 'var(--success)'), active: [], cost: cost, success: true };
-                            break; // standard 2-opt restarts after improvement
+                            bestFoundCost = cost;
+                            bestTour = [...tour, 0];
+                            yield { pseudo: 7, msg: `Improvement found! New Best: ${cost}`, edges: drawTour(tour, 'var(--success)'), active: [...tour, 0], cost: cost, success: true };
+                            break; 
                         }
                     }
                     if (improved) break;
                 }
             }
-            yield { pseudo: 7, msg: "Local minimum reached. No more improvements possible.", edges: drawTour(tour, 'var(--success)'), active: [] };
+            setStatus('Local Optima', 'finished');
+            bestTour = [...tour, 0];
+            bestFoundCost = cost;
+            yield { pseudo: 8, msg: "Local minimum reached. No more improvements possible.", edges: drawTour(tour, 'var(--success)'), active: [...tour, 0], cost: cost };
         }
 
         function resetSim() {
             stopSim();
+            setStatus('Idle', 'idle');
             stepCounter = 0;
+            passCounter = 0;
             bestFoundCost = Infinity;
+            bestTour = [];
+            history = [];
+            highlightMatrix(null, null);
             document.getElementById('step-count').innerText = '0';
-            document.getElementById('best-cost').innerText = '∞';
+            document.getElementById('pass-count').innerText = '0';
+            document.getElementById('curr-path').innerText = '-';
+            document.getElementById('curr-cost').innerText = '0';
+            document.getElementById('final-results-container').style.display = 'none';
+
+            const n = nodes.length;
+            const algo = document.getElementById('algo-select').value;
+
+            const factorial = (num) => num <= 1 ? 1 : num * factorial(num - 1);
+
+            if (algo === 'brute') {
+                simGen = genBrute();
+                totalSteps = 4 + (factorial(n - 1) * (5 + 2 * (n - 1))) + 1;
+                totalPasses = factorial(n - 1);
+                document.getElementById('total-steps').innerText = totalSteps;
+                document.getElementById('total-passes').innerText = totalPasses;
+            } else if (algo === 'greedy') {
+                simGen = genGreedy();
+                totalSteps = 2 + ((n - 1) * 5) + 3;
+                totalPasses = n - 1;
+                document.getElementById('total-steps').innerText = totalSteps;
+                document.getElementById('total-passes').innerText = totalPasses;
+            } else if (algo === 'twoopt') {
+                simGen = genTwoOpt();
+                document.getElementById('total-steps').innerText = "Heuristic";
+                document.getElementById('total-passes').innerText = "Dynamic";
+            }
+
             document.getElementById('log-box').innerHTML = '<div class="log-entry">Simulation reset. Press Step or Play to begin.</div>';
             highlightPseudo(null);
             drawGraph('main-svg', nodes, []);
-
-            const algo = document.getElementById('algo-select').value;
-            if (algo === 'brute') simGen = genBrute();
-            else if (algo === 'greedy') simGen = genGreedy();
-            else if (algo === 'twoopt') simGen = genTwoOpt();
         }
 
         async function stepSim() {
             if (!simGen) resetSim();
-            const res = await simGen.next();
-            if (!res.done) {
-                const state = res.value;
-                highlightPseudo(state.pseudo);
-                logMsg(state.msg, state.success);
-                updateStats(state.cost || null);
-                drawGraph('main-svg', nodes, state.edges || [], state.active || []);
+
+            let state;
+            if (stepCounter < history.length) {
+                // Moving forward through history
+                state = history[stepCounter];
+                stepCounter++;
             } else {
-                logMsg("Algorithm Finished.", true);
-                stopSim();
+                // Get next from generator
+                const res = await simGen.next();
+                if (res.done) {
+                    logMsg("Algorithm Finished.", true);
+                    stopSim();
+                    
+                    // Clear current path on natural finish
+                    document.getElementById('curr-path').innerText = "-";
+                    document.getElementById('curr-cost').innerText = "0";
+
+                    // Display the dedicated Final Results banner
+                    document.getElementById('final-results-container').style.display = 'flex';
+                    document.getElementById('final-best-cost').innerText = bestFoundCost === Infinity ? '∞' : bestFoundCost;
+                    document.getElementById('final-res-path').innerText = bestTour.length > 0 ? bestTour.join(' → ') : '-';
+
+                    // Draw final optimal path
+                    if (bestTour.length > 0) {
+                        const edges = [];
+                        for (let i = 0; i < bestTour.length - 1; i++) {
+                            edges.push({ u: bestTour[i], v: bestTour[i+1], color: 'var(--success)', width: 3 });
+                        }
+                        drawGraph('main-svg', nodes, edges, bestTour);
+                    }
+                    return;
+                }
+                state = res.value;
+                state.passVal = passCounter; // snapshot pass
+                history.push(state);
+                stepCounter++;
+            }
+
+            applyState(state);
+        }
+
+        async function skipToEnd() {
+            stopSim();
+            if (!simGen) resetSim();
+            
+            // Fast-forward generator
+            let res = await simGen.next();
+            while(!res.done) {
+                const state = res.value;
+                state.passVal = passCounter;
+                history.push(state);
+                stepCounter++;
+                res = await simGen.next();
+            }
+            
+            // Clear "current" stats on skip to end
+            document.getElementById('curr-path').innerText = "-";
+            document.getElementById('curr-cost').innerText = "0";
+
+            // Re-apply the last step
+            if(history.length > 0) applyState(history[history.length-1]);
+            
+            // Trigger final display via stepSim (this will handle the green highlighting)
+            stepSim();
+        }
+
+        function backSim() {
+            if (stepCounter <= 1) return;
+            stopSim();
+            stepCounter--;
+            const state = history[stepCounter - 1];
+            applyState(state);
+        }
+
+        function applyState(state) {
+            highlightPseudo(state.pseudo);
+            logMsg(state.msg, state.success);
+            updateStats(state.cost || null);
+            drawGraph('main-svg', nodes, state.edges || [], state.active || []);
+            document.getElementById('step-count').innerText = stepCounter;
+            document.getElementById('pass-count').innerText = state.passVal || passCounter;
+            
+            // Update Current Path Display
+            if (state.active) {
+                document.getElementById('curr-path').innerText = state.active.join(' → ');
+            }
+            if (state.cost !== undefined) {
+                document.getElementById('curr-cost').innerText = state.cost;
+            }
+
+            // Sync Result Path if it was found
+            if (state.success && state.cost) {
+                const pathStr = state.active.join(' → ');
+                document.getElementById('path-stat').style.display = 'block';
+                document.getElementById('res-path').innerText = pathStr;
             }
         }
 
@@ -1422,11 +1978,7 @@
             }
 
             // Randomize the order of nodes for the Hamiltonian Cycle to generate a "new" instance
-            let cycleOrder = nodes.map(n => n.id).sort(() => Math.random() - 0.5);
-            if (cycleOrder.length < n) {
-                // fallback if nodes not initialized correctly for some reason
-                cycleOrder = [0, 1, 2, 3, 4, 5].sort(() => Math.random() - 0.5);
-            }
+            let cycleOrder = [...Array(n).keys()].sort(() => Math.random() - 0.5);
 
             let hcEdges = [];
             for (let i = 0; i < n; i++) {
@@ -1460,14 +2012,111 @@
             }
 
             drawGraph('np-tsp-svg', npNodes, tspEdges);
+            drawNPFlowchart();
+        }
+
+        function drawNPFlowchart() {
+            const svg = document.getElementById('np-flowchart-svg');
+            const steps = [
+                { title: "Input: G (HC)", color: "var(--primary)" },
+                { title: "Copy Vertices", color: "var(--muted)" },
+                { title: "Assign Weights", color: "var(--warning)" },
+                { title: "Budget X = n", color: "var(--success)" },
+                { title: "Output: G' (TSP)", color: "var(--primary)" }
+            ];
+
+            let html = '';
+            const nodeW = 120, nodeH = 40, gap = 40;
+
+            steps.forEach((s, i) => {
+                const x = 20 + i * (nodeW + gap);
+                const y = 40;
+
+                // Box
+                html += `<rect x="${x}" y="${y}" width="${nodeW}" height="${nodeH}" rx="6" fill="${s.color}" fill-opacity="0.1" stroke="${s.color}" stroke-width="2" />`;
+                // Text
+                html += `<text x="${x + nodeW / 2}" y="${y + nodeH / 2 + 5}" fill="var(--text)" font-size="10" font-weight="bold" text-anchor="middle">${s.title}</text>`;
+
+                // Arrow
+                if (i < steps.length - 1) {
+                    const ax = x + nodeW;
+                    const ay = y + nodeH / 2;
+                    html += `<line x1="${ax}" y1="${ay}" x2="${ax + gap}" y2="${ay}" stroke="var(--border)" stroke-width="2" />`;
+                    html += `<polygon points="${ax + gap},${ay} ${ax + gap - 8},${ay - 4} ${ax + gap - 8},${ay + 4}" fill="var(--border)" />`;
+                }
+            });
+
+            svg.innerHTML = html;
+        }
+
+        function drawGrowthChart() {
+            const svg = document.getElementById('growth-chart');
+            const w = 400, h = 200;
+            const padding = 30;
+
+            const factorial = (n) => n <= 1 ? 1 : n * factorial(n - 1);
+
+            // X scale: 0 to 10 nodes
+            const getX = (n) => padding + (n / 10) * (w - 2 * padding);
+            // Y scale: Cap at 500 for visualization (since 10! is millions)
+            const maxY = 500;
+            const getY = (val) => (h - padding) - (Math.min(val, maxY) / maxY) * (h - 2 * padding);
+
+            let html = '';
+
+            // Axes
+            html += `<line x1="${padding}" y1="${h - padding}" x2="${w - padding}" y2="${h - padding}" stroke="var(--border)" />`; // X
+            html += `<line x1="${padding}" y1="${padding}" x2="${padding}" y2="${h - padding}" stroke="var(--border)" />`; // Y
+
+            // Grid & Labels
+            for (let i = 0; i <= 10; i += 2) {
+                const x = getX(i);
+                html += `<text x="${x}" y="${h - padding + 15}" fill="var(--muted)" font-size="9" text-anchor="middle">${i}</text>`;
+            }
+            html += `<text x="${padding - 5}" y="${padding}" fill="var(--muted)" font-size="9" text-anchor="end">Explosion</text>`;
+            html += `<text x="${w / 2}" y="${h - 5}" fill="var(--muted)" font-size="10" text-anchor="middle">Number of Cities (n)</text>`;
+
+            // O(n!) Line - Red
+            let brutePath = `M ${getX(1)} ${getY(factorial(1))}`;
+            for (let i = 1.1; i <= 10; i += 0.1) {
+                brutePath += ` L ${getX(i)} ${getY(factorial(i))}`;
+            }
+            html += `<path d="${brutePath}" fill="none" stroke="var(--danger)" stroke-width="3" />`;
+
+            // O(n^2) Line - Blue (NN)
+            let nnPath = `M ${getX(1)} ${getY(1 * 1)}`;
+            for (let i = 1.1; i <= 10; i += 0.1) {
+                nnPath += ` L ${getX(i)} ${getY(i * i)}`;
+            }
+            html += `<path d="${nnPath}" fill="none" stroke="var(--primary)" stroke-width="2" />`;
+
+            // O(n^2) Line - Green (2-Opt) 
+            // For visualization we offset it slightly or make it dashed
+            let optPath = `M ${getX(1)} ${getY(1 * 1.2)}`;
+            for (let i = 1.1; i <= 10; i += 0.1) {
+                optPath += ` L ${getX(i)} ${getY(i * i * 1.2)}`; // Slight visual offset to distinguish
+            }
+            html += `<path d="${optPath}" fill="none" stroke="var(--success)" stroke-width="2" stroke-dasharray="2,2" />`;
+
+            svg.innerHTML = html;
         }
 
         // Init
         document.addEventListener('DOMContentLoaded', () => {
             generateGraph();
+            drawGrowthChart();
+
+            // Show tutorial if not seen
+            if (!localStorage.getItem('tsp_tutorial_seen')) {
+                showTutorial();
+            }
+
             // Close modal on outside click
             document.getElementById('modal').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('modal')) closeModal();
+            });
+            document.getElementById('tutorial-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('tutorial-modal')) closeTutorial();
             });
         });
 
