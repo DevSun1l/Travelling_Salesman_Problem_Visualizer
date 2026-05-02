@@ -764,8 +764,15 @@
                     <p>Total verification time is O(N), which is polynomial.</p>
                 </div>
                 <p><strong>2. NP-Hardness: Reduction from Hamiltonian Cycle</strong></p>
-
                 <div style="margin-left: 15px;">
+                    <h4 style="color: var(--primary); margin-top: 15px;">Why Hamiltonian Cycle?</h4>
+                    <p>When proving a problem is NP-Hard, you want to find a known NP-Complete problem that is structurally as close to your target problem as possible to make the translation (the gadget) easy.</p>
+                    <p>The Hamiltonian Cycle and the Traveling Salesperson Problem are essentially computational twins:</p>
+                    <ul>
+                        <li><strong>Hamiltonian Cycle asks:</strong> "Does there exist a continuous loop that visits every city exactly once?" (It only cares about the existence of the roads).</li>
+                        <li><strong>TSP (Decision) asks:</strong> "Does there exist a continuous loop that visits every city exactly once, and costs less than budget <i>B</i>?" (It cares about the weight of the roads).</li>
+                    </ul>
+                    <p>Because TSP is just HC with a budget attached, HC is the most natural, direct path for a reduction. You don't need complex, mind-bending gadgets (like you would if you reduced from a logic puzzle like 3-SAT).</p>
                     <h4 style="color: var(--primary); margin-top: 15px;">The Setup</h4>
                     <p><strong>The HC Instance (Input):</strong> You are given a standard graph <i>G</i> with <i>N</i>
                         vertices. Question: Does there exist a cycle that visits every vertex exactly once?</p>
@@ -818,6 +825,58 @@
                         </p>
                     </div>
 
+                    <h4 style="color: var(--primary); margin-top: 15px;">Worked Example: Step-by-Step Reduction</h4>
+                    <div style="background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <!-- Column 1: HC Instance -->
+                            <div style="text-align: center;">
+                                <p style="font-weight: bold; color: var(--text); margin-bottom: 10px; font-size: 13px;">1. Hamiltonian Cycle (Graph G)</p>
+                                <svg width="180" height="130" viewBox="0 0 200 150" style="background: rgba(0,0,0,0.2); border-radius: 8px;">
+                                    <!-- Edges -->
+                                    <line x1="100" y1="30" x2="50" y2="110" stroke="var(--primary)" stroke-width="3"/>
+                                    <line x1="50" y1="110" x2="150" y2="110" stroke="var(--primary)" stroke-width="3"/>
+                                    <line x1="150" y1="110" x2="100" y2="30" stroke="var(--danger)" stroke-width="2" stroke-dasharray="5" opacity="0.4"/>
+                                    
+                                    <!-- Nodes -->
+                                    <circle cx="100" cy="30" r="15" fill="var(--panel)" stroke="var(--primary)" stroke-width="2"/>
+                                    <circle cx="50" cy="110" r="15" fill="var(--panel)" stroke="var(--primary)" stroke-width="2"/>
+                                    <circle cx="150" cy="110" r="15" fill="var(--panel)" stroke="var(--primary)" stroke-width="2"/>
+                                    <text x="100" y="35" fill="white" font-size="12" font-weight="bold" text-anchor="middle">A</text>
+                                    <text x="50" y="115" fill="white" font-size="12" font-weight="bold" text-anchor="middle">B</text>
+                                    <text x="150" y="115" fill="white" font-size="12" font-weight="bold" text-anchor="middle">C</text>
+                                </svg>
+                                <p style="font-size: 11px; margin-top: 10px; color: var(--muted);">Road <strong>C → A</strong> is missing. <br><span style="color:var(--danger)">Result: NO Hamiltonian Cycle.</span></p>
+                            </div>
+                            <!-- Column 2: TSP Instance -->
+                            <div style="text-align: center;">
+                                <p style="font-weight: bold; color: var(--text); margin-bottom: 10px; font-size: 13px;">2. TSP Translation (Graph G')</p>
+                                <svg width="180" height="130" viewBox="0 0 200 150" style="background: rgba(0,0,0,0.2); border-radius: 8px;">
+                                    <!-- Edges with weights -->
+                                    <line x1="100" y1="30" x2="50" y2="110" stroke="var(--success)" stroke-width="3"/>
+                                    <text x="60" y="75" fill="var(--success)" font-size="12" font-weight="bold">w=1</text>
+                                    
+                                    <line x1="50" y1="110" x2="150" y2="110" stroke="var(--success)" stroke-width="3"/>
+                                    <text x="100" y="128" fill="var(--success)" font-size="12" font-weight="bold">w=1</text>
+                                    
+                                    <line x1="150" y1="110" x2="100" y2="30" stroke="var(--danger)" stroke-width="3"/>
+                                    <text x="130" y="75" fill="var(--danger)" font-size="12" font-weight="bold">w=2</text>
+
+                                    <!-- Nodes -->
+                                    <circle cx="100" cy="30" r="15" fill="var(--panel)" stroke="var(--primary)" stroke-width="2"/>
+                                    <circle cx="50" cy="110" r="15" fill="var(--panel)" stroke="var(--primary)" stroke-width="2"/>
+                                    <circle cx="150" cy="110" r="15" fill="var(--panel)" stroke="var(--primary)" stroke-width="2"/>
+                                    <text x="100" y="35" fill="white" font-size="12" font-weight="bold" text-anchor="middle">A</text>
+                                    <text x="50" y="115" fill="white" font-size="12" font-weight="bold" text-anchor="middle">B</text>
+                                    <text x="150" y="115" fill="white" font-size="12" font-weight="bold" text-anchor="middle">C</text>
+                                </svg>
+                                <p style="font-size: 11px; margin-top: 10px; color: var(--muted);">Target Budget <strong>X = 3</strong>. <br>Tour Cost (1+1+2) = 4. <br><span style="color:var(--danger)">Result: 4 > 3 (NO TSP tour).</span></p>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; padding: 12px; background: rgba(14, 165, 233, 0.05); border-radius: 8px; font-size: 12px; color: var(--muted); border: 1px solid rgba(14, 165, 233, 0.1);">
+                            <strong>Insight:</strong> Notice how the "missing" road in the HC problem was mathematically converted into a "penalty weight" in the TSP problem. This forces the TSP instance to return the exact same answer (NO) as the original HC instance, proving the problems are computationally linked.
+                        </div>
+                    </div>
+
                     <h4 style="color: var(--primary); margin-top: 15px;">The Construction Algorithm Breakdown</h4>
                     <div style="margin-left: 15px;">
                         <p><strong>Step 1: Copy the Vertices</strong> - The computer looks at <i>N</i> vertices in
@@ -837,12 +896,14 @@
                         </p>
                     </div>
 
-                    <h4 style="color: var(--primary); margin-top: 15px;">Conclusion</h4>
-                    <p>By proving the <strong>forward direction</strong>, the <strong>backward direction</strong>, and
-                        the
-                        <strong>polynomial-time construction</strong>, we have formally proven that the
-                        <strong>Traveling Salesperson Problem (Decision Version) is NP-Complete!</strong>
-                    </p>
+                    <h4 style="color: var(--primary); margin-top: 25px;">Proof Justification: Why This Proves NP-Hardness</h4>
+                    <div style="background: rgba(14, 165, 233, 0.05); padding: 15px; border-radius: 12px; border-left: 4px solid var(--primary); margin-bottom: 20px;">
+                        <p><strong>1. The Baseline:</strong> We already know as a mathematical fact that the Hamiltonian Cycle is NP-Complete. This means it is among the hardest problems in the class NP, and no fast (polynomial-time) algorithm is believed to exist for it.</p>
+                        <p><strong>2. The Translation (HC ≤<sub>p</sub> TSP):</strong> We have proven that we can take any instance of the Hamiltonian Cycle and translate it into a TSP instance in polynomial time (≤<sub>p</sub>).</p>
+                        <p><strong>3. The Implication:</strong> Because the translation is fast, if we ever discovered a fast algorithm to solve the TSP, we could run our translation and then use that TSP solver to instantly solve the Hamiltonian Cycle.</p>
+                        <p><strong>4. The Conclusion:</strong> Since we know the Hamiltonian Cycle is NP-Complete (and therefore universally accepted as "hard"), the fact that we can use TSP to solve it dictates that TSP must be at least as hard as the Hamiltonian Cycle.</p>
+                        <p>Therefore, by the transitive property of computational complexity: because HC is NP-Complete, the successful reduction <strong>HC ≤<sub>p</sub> TSP</strong> formally proves that TSP is <strong>NP-Hard</strong>.</p>
+                    </div>
 
                     <h3>Theoretical Performance & Approximation</h3>
                     <div
@@ -905,10 +966,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                    
+                    <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); font-style: italic;">
+                        <strong>Citation:</strong> D. Jungnickel, “A hard problem: the TSP,” in Algorithms and computation in mathematics, 1999, pp. 423–469. doi: 10.1007/978-3-662-03822-2_14.
+                    </div>
+                </div> <!-- closes margin-left: 15px -->
+            </div> <!-- closes theory-content -->
         </details>
-    </div>
+    </div> <!-- closes theory-section -->
 
     <!-- Modal Overlay for Explanations -->
     <div class="modal-overlay" id="modal">
@@ -1001,10 +1066,29 @@
                 </div>
 
                 <div class="control-group">
+                    <p style="font-size: 11px; color: var(--muted); margin-bottom: 8px; font-style: italic; line-height: 1.3;">
+                        ⚠️ <b>Note:</b> Nodes are capped at 10 because Brute Force requires <b>n!</b> (factorial) permutations. At n=11, your browser would need to evaluate ~39.9 million paths!
+                    </p>
                     <label>Number of Nodes (1-10)</label>
                     <input type="number" id="node-count" value="5" min="1" max="10" oninput="enforceLimit(this)">
-                    <button class="btn-primary" onclick="generateGraph()" style="margin-top: 5px;">Generate
-                        Graph</button>
+                    <button class="btn-primary" onclick="generateGraph()" style="margin-top: 5px;">Generate Random Graph</button>
+                </div>
+
+                <div class="control-group">
+                    <label>📍 Start Node</label>
+                    <select id="start-node-select" onchange="resetSim()">
+                        <option value="0">Node 0</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label>🗺️ Educational Presets</label>
+                    <select id="preset-select" onchange="loadPreset(this.value)">
+                        <option value="random">Random Distribution</option>
+                        <option value="greedyTrap">The "Greedy Trap" (Linear Expansion)</option>
+                        <option value="perfectCircle">The "Perfect Circle" (Geometric)</option>
+                        <option value="twinCities">The "Twin Cities" (Clusters)</option>
+                    </select>
                 </div>
 
                 <div class="control-group">
@@ -1171,11 +1255,66 @@
         function enforceLimit(el) {
             if (el.value > 10) el.value = 10;
             if (el.value !== "" && el.value < 1) el.value = 1;
+            updateStartNodeDropdown();
+        }
+
+        function updateStartNodeDropdown() {
+            const count = parseInt(document.getElementById('node-count').value) || 5;
+            const select = document.getElementById('start-node-select');
+            const currentVal = select.value;
+            
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                html += `<option value="${i}">Node ${i}</option>`;
+            }
+            select.innerHTML = html;
+            
+            if (currentVal !== "" && parseInt(currentVal) < count) {
+                select.value = currentVal;
+            } else {
+                select.value = 0;
+            }
+        }
+
+        function getStartNode() {
+            const val = document.getElementById('start-node-select').value;
+            return parseInt(val) || 0;
         }
 
         /* ========================
            DATA & CONFIGURATION
            ======================== */
+        const myPresets = {
+            // Alternating distances that trick the Greedy algorithm
+            greedyTrap: [
+                { id: 0, x: 300, y: 200 }, // Center
+                { id: 1, x: 330, y: 200 }, // +30 Right
+                { id: 2, x: 240, y: 200 }, // -60 Left
+                { id: 3, x: 420, y: 200 }, // +120 Right
+                { id: 4, x: 100, y: 200 }  // -240 Left
+            ],
+            // A perfect circle (Easiest possible shape)
+            perfectCircle: [
+                { id: 0, x: 300, y: 80 },
+                { id: 1, x: 400, y: 120 },
+                { id: 2, x: 450, y: 220 },
+                { id: 3, x: 400, y: 320 },
+                { id: 4, x: 300, y: 360 },
+                { id: 5, x: 200, y: 320 },
+                { id: 6, x: 150, y: 220 },
+                { id: 7, x: 200, y: 120 }
+            ],
+            // Two distinct clusters separated by distance
+            twinCities: [
+                // City 1 (Left)
+                { id: 0, x: 100, y: 180 }, { id: 1, x: 130, y: 150 },
+                { id: 2, x: 130, y: 210 }, { id: 3, x: 160, y: 180 },
+                // City 2 (Right)
+                { id: 4, x: 440, y: 180 }, { id: 5, x: 470, y: 150 },
+                { id: 6, x: 470, y: 210 }, { id: 7, x: 500, y: 180 }
+            ]
+        };
+
         const algoInfo = {
             brute: {
                 pseudo: [
@@ -1264,6 +1403,41 @@
         /* ========================
            INITIALIZATION & UI
            ======================== */
+
+        function loadPreset(key) {
+            stopSim();
+            if (key === 'random') {
+                document.getElementById('node-count').value = 5;
+                updateStartNodeDropdown();
+                generateGraph();
+                return;
+            }
+            const preset = myPresets[key];
+            if (!preset) return;
+
+            // Deep copy and reset sim
+            nodes = JSON.parse(JSON.stringify(preset));
+            document.getElementById('node-count').value = nodes.length;
+            updateStartNodeDropdown();
+            adj = buildAdjacency(nodes);
+            renderMatrix(adj);
+            updateRightPanel();
+            resetSim();
+            drawGraph('main-svg', nodes);
+            
+            // Log the preset purpose
+            const log = document.getElementById('log-box');
+            log.innerHTML = '';
+            const msgs = {
+                greedyTrap: "PRESET LOADED: The Greedy Trap. Watch how Nearest Neighbor fails on this linear expansion!",
+                perfectCircle: "PRESET LOADED: Perfect Circle. A baseline test where most algorithms find the optimum.",
+                twinCities: "PRESET LOADED: Twin Cities. Mimics long-distance logistics between tight clusters."
+            };
+            const entry = document.createElement('div');
+            entry.className = 'log-entry active';
+            entry.innerText = msgs[key];
+            log.appendChild(entry);
+        }
 
         function switchMode() {
             currentMode = document.getElementById('mode-select').value;
@@ -1495,6 +1669,7 @@
         function generateGraph() {
             stopSim();
             const n = parseInt(document.getElementById('node-count').value) || 5;
+            updateStartNodeDropdown();
             const size = getCanvasSize('main-svg');
             nodes = generateNodes(n, size.w, size.h);
             adj = buildAdjacency(nodes);
@@ -1539,8 +1714,9 @@
             setStatus('Running', 'running');
             yield { pseudo: 0, msg: "Initializing variables.", edges: [], active: [] };
 
-            const idsToVisit = nodes.filter(n => n.id !== 0).map(n => n.id);
-            yield { pseudo: 1, msg: "Excluding Start Node 0 from permutations.", edges: [], active: [0] };
+            const startNode = getStartNode();
+            const idsToVisit = nodes.filter(n => n.id !== startNode).map(n => n.id);
+            yield { pseudo: 1, msg: `Excluding Start Node ${startNode} from permutations.`, edges: [], active: [startNode] };
 
             function* permute(arr, m = []) {
                 if (arr.length === 0) yield m;
@@ -1558,12 +1734,12 @@
             for (let p of perms) {
                 passCounter++;
                 document.getElementById('pass-count').innerText = passCounter;
-                let partialPath = [0];
+                let partialPath = [startNode];
                 let edges = [];
                 let d = 0;
-                let currentV = 0;
-                yield { pseudo: 4, msg: `Resetting cost for new permutation: ${p.join('-')}`, edges: [], active: [0], cost: 0 };
-                yield { pseudo: 5, msg: `Evaluating traversal...`, edges: [], active: [0], cost: 0 };
+                let currentV = startNode;
+                yield { pseudo: 4, msg: `Resetting cost for new permutation: ${p.join('-')}`, edges: [], active: [startNode], cost: 0 };
+                yield { pseudo: 5, msg: `Evaluating traversal...`, edges: [], active: [startNode], cost: 0 };
 
                 for (let nextV of p) {
                     highlightMatrix(currentV, nextV);
@@ -1575,13 +1751,13 @@
                     yield { pseudo: 7, msg: `Updated current vertex to ${currentV}.`, edges, active: [...partialPath], cost: d };
                 }
 
-                highlightMatrix(currentV, 0);
-                d += adj[currentV][0];
-                edges.push({ u: currentV, v: 0, color: 'var(--primary)', width: 2 });
-                partialPath.push(0);
-                yield { pseudo: 8, msg: `Returning to Start Node 0. Final Cost: ${d}`, edges, active: [...partialPath], cost: d };
+                highlightMatrix(currentV, startNode);
+                d += adj[currentV][startNode];
+                edges.push({ u: currentV, v: startNode, color: 'var(--primary)', width: 2 });
+                partialPath.push(startNode);
+                yield { pseudo: 8, msg: `Returning to Start Node ${startNode}. Final Cost: ${d}`, edges, active: [...partialPath], cost: d };
 
-                const fullPath = [0, ...p, 0];
+                const fullPath = [startNode, ...p, startNode];
                 yield { pseudo: 9, msg: `Check if ${d} < ${bestFoundCost === Infinity ? '∞' : bestFoundCost}`, edges, active: fullPath, cost: d };
 
                 if (d < bestFoundCost) {
@@ -1599,13 +1775,14 @@
         // Generator: Greedy
         async function* genGreedy() {
             setStatus('Running', 'running');
-            let path = [0];
-            let visited = new Set([0]);
+            const startNode = getStartNode();
+            let path = [startNode];
+            let visited = new Set([startNode]);
             let total_dist = 0;
-            let current_v = 0;
+            let current_v = startNode;
 
-            yield { pseudo: 0, msg: "path = [0], current_v = 0, total_dist = 0", active: [0], cost: 0 };
-            yield { pseudo: 1, msg: "visited = {0}, total_cities = " + nodes.length, active: [0], cost: 0 };
+            yield { pseudo: 0, msg: `path = [${startNode}], current_v = ${startNode}, total_dist = 0`, active: [startNode], cost: 0 };
+            yield { pseudo: 1, msg: `visited = {${startNode}}, total_cities = ` + nodes.length, active: [startNode], cost: 0 };
 
             while (visited.size < nodes.length) {
                 passCounter++;
@@ -1644,16 +1821,16 @@
                 yield { pseudo: 10, msg: `total_dist += ${shortest_d}, current_v = ${nearest}`, active: path, edges: curEdges, cost: total_dist };
             }
 
-            let final_leg = adj[current_v][0];
-            yield { pseudo: 11, msg: `Calculating return trip to Start Node 0 (Dist: ${final_leg})`, active: path, cost: total_dist };
+            let final_leg = adj[current_v][startNode];
+            yield { pseudo: 11, msg: `Calculating return trip to Start Node ${startNode} (Dist: ${final_leg})`, active: path, cost: total_dist };
 
             total_dist += final_leg;
-            path.push(0);
+            path.push(startNode);
             let finalEdges = [];
             for (let i = 0; i < path.length - 1; i++) {
                 finalEdges.push({ u: path[i], v: path[i + 1], color: 'var(--success)', width: 3 });
             }
-            yield { pseudo: 12, msg: `total_dist += ${final_leg}, path.append(0)`, active: path, edges: finalEdges, cost: total_dist };
+            yield { pseudo: 12, msg: `total_dist += ${final_leg}, path.append(${startNode})`, active: path, edges: finalEdges, cost: total_dist };
 
             bestFoundCost = total_dist;
             bestTour = [...path];
@@ -1664,12 +1841,22 @@
         // Generator: 2-Opt
         async function* genTwoOpt() {
             setStatus('Running', 'running');
-            // First run Greedy silently to get initial tour
-            let getD = (path) => path.reduce((s, c, i) => s + adj[c][path[(i + 1) % path.length]], 0);
-            let drawTour = (p, color) => p.map((c, i) => ({ u: c, v: p[(i + 1) % p.length], color: color, width: 2 }));
+            const startNode = getStartNode();
+            
+            let getD = (p) => {
+                let d = 0;
+                for(let i=0; i<p.length-1; i++) d += adj[p[i]][p[i+1]];
+                d += adj[p[p.length-1]][startNode]; // Close loop
+                return d;
+            };
+            let drawTour = (p, color) => {
+                let e = p.map((c, i) => ({ u: c, v: p[i + 1] || startNode, color: color, width: 2 }));
+                return e;
+            };
             let twoOptSwap = (p, i, k) => p.slice(0, i).concat(p.slice(i, k + 1).reverse()).concat(p.slice(k + 1));
 
-            let t = [0], v = new Set([0]);
+            // Greedy init
+            let t = [startNode], v = new Set([startNode]);
             while (v.size < nodes.length) {
                 let last = t[t.length - 1], nearest = -1, minDist = Infinity;
                 for (let i = 0; i < nodes.length; i++) {
@@ -1682,13 +1869,13 @@
             let tour = [...t];
             let cost = getD(tour);
 
-            yield { pseudo: 0, msg: "Initial tour from Greedy. Cost: " + cost, edges: drawTour(tour, 'var(--primary)'), active: [...tour, 0], cost: cost };
+            yield { pseudo: 0, msg: "Initial tour from Greedy. Cost: " + cost, edges: drawTour(tour, 'var(--primary)'), active: [...tour, startNode], cost: cost };
 
             let improved = true;
             while (improved) {
-                yield { pseudo: 1, msg: "Checking for improvements...", edges: drawTour(tour, 'var(--primary)'), active: [...tour, 0], cost: cost };
+                yield { pseudo: 1, msg: "Checking for improvements...", edges: drawTour(tour, 'var(--primary)'), active: [...tour, startNode], cost: cost };
                 improved = false;
-                yield { pseudo: 2, msg: "improvement_made = false", edges: drawTour(tour, 'var(--primary)'), active: [...tour, 0], cost: cost };
+                yield { pseudo: 2, msg: "improvement_made = false", edges: drawTour(tour, 'var(--primary)'), active: [...tour, startNode], cost: cost };
 
                 for (let i = 1; i < nodes.length - 1; i++) {
                     for (let k = i + 1; k < nodes.length; k++) {
@@ -1701,21 +1888,21 @@
                         const newCost = getD(newTour);
 
                         // Pseudo 4: 2OptSwap
-                        yield { pseudo: 4, msg: `Reversing segment between ${tour[i]} and ${tour[k]}`, edges: drawTour(newTour, 'var(--warning)'), active: [...newTour, 0], cost: cost };
+                        yield { pseudo: 4, msg: `Reversing segment between ${tour[i]} and ${tour[k]}`, edges: drawTour(newTour, 'var(--warning)'), active: [...newTour, startNode], cost: cost };
                         
                         // Pseudo 5: Calculate distance
-                        yield { pseudo: 5, msg: `Candidate tour cost: ${newCost}`, edges: drawTour(newTour, 'var(--warning)'), active: [...newTour, 0], cost: newCost };
+                        yield { pseudo: 5, msg: `Candidate tour cost: ${newCost}`, edges: drawTour(newTour, 'var(--warning)'), active: [...newTour, startNode], cost: newCost };
 
                         // Pseudo 6: If check
-                        yield { pseudo: 6, msg: `Is ${newCost} < ${cost}?`, edges: drawTour(newTour, 'var(--warning)'), active: [...newTour, 0], cost: newCost };
+                        yield { pseudo: 6, msg: `Is ${newCost} < ${cost}?`, edges: drawTour(newTour, 'var(--warning)'), active: [...newTour, startNode], cost: newCost };
 
                         if (newCost < cost) {
                             tour = newTour;
                             cost = newCost;
                             improved = true;
                             bestFoundCost = cost;
-                            bestTour = [...tour, 0];
-                            yield { pseudo: 7, msg: `Improvement found! New Best: ${cost}`, edges: drawTour(tour, 'var(--success)'), active: [...tour, 0], cost: cost, success: true };
+                            bestTour = [...tour, startNode];
+                            yield { pseudo: 7, msg: `Improvement found! New Best: ${cost}`, edges: drawTour(tour, 'var(--success)'), active: [...tour, startNode], cost: cost, success: true };
                             break; 
                         }
                     }
@@ -1723,9 +1910,9 @@
                 }
             }
             setStatus('Local Optima', 'finished');
-            bestTour = [...tour, 0];
+            bestTour = [...tour, startNode];
             bestFoundCost = cost;
-            yield { pseudo: 8, msg: "Local minimum reached. No more improvements possible.", edges: drawTour(tour, 'var(--success)'), active: [...tour, 0], cost: cost };
+            yield { pseudo: 8, msg: "Local minimum reached. No more improvements possible.", edges: drawTour(tour, 'var(--success)'), active: [...tour, startNode], cost: cost };
         }
 
         function resetSim() {
