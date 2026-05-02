@@ -690,6 +690,19 @@
                     <li><strong>Efficiency:</strong> You must do so using the least amount of "cost" (which usually
                         means distance, time, or money).</li>
                 </ul>
+                
+                <h4 style="color: var(--primary); margin-top: 15px;">The Certificate (Verification)</h4>
+                <div style="margin-left: 15px; margin-bottom: 10px; background: rgba(16, 185, 129, 0.05); padding: 10px; border-radius: 8px; border-left: 3px solid var(--success);">
+                    <p><em>What is a Certificate?</em> In complexity theory, a certificate is the "proof" or "evidence" that allows a computer to quickly verify if a specific solution is correct. For the TSP, the certificate is simply an <strong>ordered list</strong> of the cities.</p>
+                    <p><em>Example:</em> [City A, City C, City E, City B, City D, City A].</p>
+                    <p style="margin-top: 10px;"><strong>The Verifier Check (Polynomial Time):</strong></p>
+                    <ol style="font-size: 13px;">
+                        <li><strong>Completeness:</strong> Scans the list to ensure every city is visited exactly once.</li>
+                        <li><strong>Distance:</strong> Sums up the weights of the edges between each city in the list.</li>
+                        <li><strong>Comparison:</strong> Checks if the Total Sum <= your target budget <i>B</i>.</li>
+                    </ol>
+                    <p style="font-size: 12px; margin-top: 5px; font-style: italic;">This verification takes O(N) time, which proves that TSP belongs to the class <strong>NP</strong>.</p>
+                </div>
 
                 <h3>Real-Life Example: Logistics and "Last Mile" Delivery</h3>
                 <p>Imagine a courier for a company like DHL, FedEx, or Aramex starting their day at a warehouse in a
@@ -746,24 +759,10 @@
                     </li>
                 </ul>
 
-                <h3>Proof of NP-Completeness</h3>
-                <p><strong>1. TSP is in NP:</strong></p>
-                <div style="margin-left: 15px; margin-bottom: 10px;">
-                    <p><em>The Certificate:</em> A certificate for the TSP is just an ordered list (or array) of the
-                        cities. Example: [City A, City C, City E, City B, City D, City A].</p>
-                    <p><em>The Verifier Check (Polynomial Time):</em></p>
-                    <ol>
-                        <li><strong>Completeness:</strong> Computer scans the array to ensure every city is listed once
-                            and start/end points match. (Takes <i>N</i> steps).</li>
-                        <li><strong>Distance:</strong> Computer adds distances between each adjacent pair. (Takes
-                            <i>N</i> steps).
-                        </li>
-                        <li><strong>Comparison:</strong> Compares final sum to the budget constraint <i>X</i>. Is the
-                            Total Sum <= <i>X</i>? (Takes 1 step).</li>
-                    </ol>
-                    <p>Total verification time is O(N), which is polynomial.</p>
-                </div>
-                <p><strong>2. NP-Hardness: Reduction from Hamiltonian Cycle</strong></p>
+                <h3>Formal Proof of NP-Completeness</h3>
+                <p>To prove TSP is NP-Complete, we must demonstrate two things: 1. It is in NP (Verified by the Certificate above), and 2. It is NP-Hard (Proven by Reduction).</p>
+                
+                <p><strong>NP-Hardness: Reduction from Hamiltonian Cycle</strong></p>
                 <div style="margin-left: 15px;">
                     <h4 style="color: var(--primary); margin-top: 15px;">Why Hamiltonian Cycle?</h4>
                     <p>When proving a problem is NP-Hard, you want to find a known NP-Complete problem that is structurally as close to your target problem as possible to make the translation (the gadget) easy.</p>
