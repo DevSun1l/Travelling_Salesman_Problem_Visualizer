@@ -1274,7 +1274,7 @@
 
                 <div class="stats-bar" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div>Step: <span id="step-count">0</span> / <span id="total-steps">-</span></div>
-                    <div>Tour: <span id="tour-count">0</span> / <span id="total-tours">-</span></div>
+                    <div>Pass: <span id="pass-count">0</span> / <span id="total-passes">-</span></div>
 
                     <div id="current-stat"
                         style="grid-column: span 2; font-size: 11px; color: var(--muted); border-top: 1px dotted var(--border); margin-top: 5px; padding-top: 5px;">
@@ -1506,9 +1506,9 @@
         let isPlaying = false;
         let simGen = null;
         let stepCounter = 0;
-        let tourCounter = 0;
+        let passCounter = 0;
         let totalSteps = 0;
-        let totalTours = 0;
+        let totalPasses = 0;
         let bestFoundCost = Infinity;
         let bestTour = []; // Stores node sequence of best tour
         let playInterval = null;
@@ -1854,8 +1854,8 @@
             yield { pseudo: 3, msg: "Calculating every possible mathematical permutation of the target cities.", edges: [], active: [] };
 
             for (let p of perms) {
-                tourCounter++;
-                document.getElementById('tour-count').innerText = tourCounter;
+                passCounter++;
+                document.getElementById('pass-count').innerText = passCounter;
                 let partialPath = [startNode];
                 let edges = [];
                 let d = 0;
@@ -1913,8 +1913,8 @@
             yield { pseudo: 1, msg: `Marking origin city as visited. Total cities to find: ${nodes.length}.`, active: [startNode], cost: 0 };
 
             while (visited.size < nodes.length) {
-                tourCounter++;
-                document.getElementById('tour-count').innerText = tourCounter;
+                passCounter++;
+                document.getElementById('pass-count').innerText = passCounter;
                 yield { pseudo: 2, msg: `Checking unvisited cities: ${visited.size} / ${nodes.length} nodes found.`, active: path, cost: total_dist };
 
                 yield { pseudo: 3, msg: "Scanning the map for the nearest unvisited neighbor...", active: path, cost: total_dist };
@@ -2000,32 +2000,33 @@
             yield { pseudo: 1, msg: `Calculating the initial tour distance to establish a baseline. Baseline Cost: ${cost}`, edges: drawTour(tour, 'var(--primary)'), active: [...tour, startNode], cost: cost };
 
             let improved = true;
-            let tCounter = 0;
             while (improved) {
-                yield { pseudo: 2, msg: "Checking for improvements: Starting a new tour review through all edges.", edges: drawTour(tour, 'var(--primary)'), active: [...tour, startNode], cost: cost };
+                yield { pseudo: 2, msg: "Checking for improvements: Starting a new pass through all tour edges.", edges: drawTour(tour, 'var(--primary)'), active: [...tour, startNode], cost: cost };
                 improved = false;
-                yield { pseudo: 3, msg: "Resetting the improvement flag for this tour iteration.", edges: drawTour(tour, 'var(--primary)'), active: [...tour, startNode], cost: cost };
+                yield { pseudo: 3, msg: "Resetting the improvement flag for this pass.", edges: drawTour(tour, 'var(--primary)'), active: [...tour, startNode], cost: cost };
 
                 for (let i = 1; i < nodes.length - 1; i++) {
                     yield { pseudo: 4, msg: `Selecting first edge starting at index ${i} for a potential swap.`, edges: drawTour(tour, 'var(--primary)'), active: [...tour, startNode], cost: cost };
                     for (let k = i + 2; k < nodes.length; k++) {
-                        tCounter++;
+                        passCounter++;
+                        document.getElementById('pass-count').innerText = passCounter;
+
                         const u1 = tour[i - 1];
                         const v1 = tour[i];
                         const u2 = tour[k];
                         const v2 = tour[(k + 1) % tour.length];
                         
                         let currentEdges = drawTour(tour, 'var(--panel-hover)');
+                        // Highlight selected edges in danger color
                         currentEdges.push({ u: u1, v: v1, color: 'var(--danger)', width: 4 });
                         currentEdges.push({ u: u2, v: v2, color: 'var(--danger)', width: 4 });
 
                         yield { 
                             pseudo: 5, 
-                            msg: `Analyzing edges for Tour #${tCounter} to see if swapping them untangles the path.`, 
+                            msg: `Analyzing edges ${u1}→${v1} and ${u2}→${v2} to see if swapping them untangles the path.`, 
                             edges: currentEdges, 
                             active: [u1, v1, u2, v2], 
-                            cost: cost,
-                            tour: tCounter
+                            cost: cost 
                         };
 
                         const newTour = twoOptSwap(tour, i, k);
@@ -2064,7 +2065,7 @@
                             bestTour = [...tour, startNode];
                             yield { pseudo: 9, msg: "The untangling reduced the distance. Committing to the new route version.", edges: drawTour(tour, 'var(--success)'), active: [...tour, startNode], cost: cost };
                             yield { pseudo: 10, msg: `New record-holding distance updated to ${cost}.`, edges: drawTour(tour, 'var(--success)'), active: [...tour, startNode], cost: cost };
-                            yield { pseudo: 11, msg: "Improvement confirmed. Flagging another tour review to look for more optimizations.", edges: drawTour(tour, 'var(--success)'), active: [...tour, startNode], cost: cost, success: true };
+                            yield { pseudo: 11, msg: "Improvement confirmed. Flagging another pass to look for more optimizations.", edges: drawTour(tour, 'var(--success)'), active: [...tour, startNode], cost: cost, success: true };
                             break;
                         }
                     }
@@ -2081,13 +2082,13 @@
             stopSim();
             setStatus('Idle', 'idle');
             stepCounter = 0;
-            tourCounter = 0;
+            passCounter = 0;
             bestFoundCost = Infinity;
             bestTour = [];
             history = [];
             highlightMatrix(null, null);
             document.getElementById('step-count').innerText = '0';
-            document.getElementById('tour-count').innerText = '0';
+            document.getElementById('pass-count').innerText = '0';
             document.getElementById('curr-path').innerText = '-';
             document.getElementById('curr-cost').innerText = '0';
             document.getElementById('final-results-container').style.display = 'none';
@@ -2101,22 +2102,22 @@
                 simGen = genBrute();
                 // 4 (init) + perms * (3 (outer) + 3*(n-1) (inner) + 1 (return) + 1 (if) + 2 (success/else)) + 1 (finish)
                 totalSteps = 4 + (factorial(n - 1) * (7 + 3 * (n - 1))) + 1;
-                totalTours = factorial(n - 1);
+                totalPasses = factorial(n - 1);
                 document.getElementById('total-steps').innerText = totalSteps;
-                document.getElementById('total-tours').innerText = totalTours;
+                document.getElementById('total-passes').innerText = totalPasses;
             } else if (algo === 'greedy') {
                 simGen = genGreedy();
                 totalSteps = 2 + ((n - 1) * 5) + 3;
-                totalTours = n - 1;
+                totalPasses = n - 1;
                 document.getElementById('total-steps').innerText = totalSteps;
-                document.getElementById('total-tours').innerText = totalTours;
+                document.getElementById('total-passes').innerText = totalPasses;
             } else if (algo === 'twoopt') {
                 simGen = genTwoOpt();
                 const counts = calculateTwoOptCounts();
                 totalSteps = counts.steps;
-                totalTours = counts.passes;
+                totalPasses = counts.passes;
                 document.getElementById('total-steps').innerText = totalSteps;
-                document.getElementById('total-tours').innerText = totalTours;
+                document.getElementById('total-passes').innerText = totalPasses;
             }
 
         function calculateTwoOptCounts() {
@@ -2207,7 +2208,7 @@
                     return;
                 }
                 state = res.value;
-                state.tourVal = tourCounter; // snapshot tour
+                state.passVal = passCounter; // snapshot pass
                 history.push(state);
                 stepCounter++;
             }
@@ -2223,7 +2224,7 @@
             let res = await simGen.next();
             while (!res.done) {
                 const state = res.value;
-                state.tourVal = tourCounter;
+                state.passVal = passCounter;
                 history.push(state);
                 stepCounter++;
                 res = await simGen.next();
@@ -2254,7 +2255,7 @@
             updateStats(state.cost || null);
             drawGraph('main-svg', nodes, state.edges || [], state.active || []);
             document.getElementById('step-count').innerText = stepCounter;
-            document.getElementById('tour-count').innerText = state.tourVal || tourCounter;
+            document.getElementById('pass-count').innerText = state.passVal || passCounter;
 
             // Update Current Path Display
             if (state.active) {
